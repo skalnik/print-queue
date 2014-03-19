@@ -6,7 +6,6 @@
   },
   "dependencies": {
     "express": "3.4.8",
-    "jade": "*",
-    "less-middleware": "*"
+    "jade": "*"
   }
 }
