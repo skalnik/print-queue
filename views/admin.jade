@@ -2,6 +2,11 @@ extends layout
 
 block content
   h1 Print Queue Admin
+  ul(class='menu')
+    li
+      form(action='/', method='post')
+        input(type='hidden', name='_method', value='delete')
+        input(type='submit', value='Clear Queue')
   ul
     each item in queue
       li= item

@@ -11,5 +11,5 @@ exports.index = function(req, res) {
 
 exports.clear = function(req, res) {
   queue = clearQueue(db, res);
-  res.render('index', { queue: queue });
+  res.redirect('/admin');
 };
