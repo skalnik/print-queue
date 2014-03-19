@@ -30,6 +30,7 @@ var auth = express.basicAuth('admin', process.env.PASSWORD || 'butts');
 
 app.get('/', user.index);
 app.post('/', user.index);
+app.get('/admin', auth, admin.index);
 app.get('/clear', auth, admin.clear);
 
 http.createServer(app).listen(app.get('port'), function(){
