@@ -15,10 +15,8 @@ exports.index = function(req, res) {
       }
     }
     else {
-      console.log('Got a value: ' + value)
       queue = JSON.parse(value);
 
-      // If posting, add it to the queue
       if(req.body.queue !== undefined) {
         toQueue = req.body.queue;
         queue.push(toQueue);
