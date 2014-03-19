@@ -8,7 +8,7 @@ exports.index = function(req, res) {
         // No queue set yet, lets fix that
         queue = []
         db.put('queue', JSON.stringify(queue));
-        res.render('index', { title: 'Express', queue: queue });
+        res.render('index', { queue: queue });
       }
       else {
         res.render('error', { error: err })
@@ -25,7 +25,7 @@ exports.index = function(req, res) {
         });
       }
 
-      res.render('index', { title: 'Express', queue: queue });
+      res.render('index', { queue: queue });
     }
   });
 };
