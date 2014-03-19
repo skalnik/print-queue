@@ -24,11 +24,12 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var routes = require('./routes');
+var user = require('./routes/public.js');
+var admin = require('./routes/admin.js');
 
-app.get('/', routes.index);
-app.post('/', routes.index);
-app.get('/clear', routes.clear);
+app.get('/', user.index);
+app.post('/', user.index);
+app.get('/clear', admin.clear);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
