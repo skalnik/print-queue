@@ -11,7 +11,7 @@ exports.index = function(req, res) {
         res.render('index', { title: 'Express', queue: queue });
       }
       else {
-        console.log("OH GOD WHAT", err);
+        res.render('error', { error: err })
       }
     }
     else {
@@ -23,7 +23,7 @@ exports.index = function(req, res) {
         toQueue = req.body.queue;
         queue.push(toQueue);
         db.put('queue', JSON.stringify(queue), function(err) {
-          console.log("OH GOD WHAT", err);
+          res.render('error', { error: err })
         });
       }
 
