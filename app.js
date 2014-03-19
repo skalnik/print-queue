@@ -5,7 +5,6 @@ var level = require('level');
 var app = module.exports = express();
 
 var db = level(process.env.DB_PATH || './tmp/db');
-db.put('queue', JSON.stringify([]));
 
 // all environments
 app.set('port', process.env.PORT || 3000);
