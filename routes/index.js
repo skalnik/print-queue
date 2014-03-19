@@ -1,13 +1,20 @@
 var app = require('../app.js')
 var db = app.get('db')
 
+var clearQueue = function(res) {
+  queue = [];
+  db.put('queue', JSON.stringify(queue), function(err) {
+    res.render('error', { error: err });
+  });
+  return queue;
+}
+
 exports.index = function(req, res) {
   db.get('queue', function(err, value) {
     if(err) {
       if(err.notFound) {
         // No queue set yet, lets fix that
-        queue = []
-        db.put('queue', JSON.stringify(queue));
+        queue = clearQueue(res);
         res.render('index', { queue: queue });
       }
       else {
@@ -28,4 +35,9 @@ exports.index = function(req, res) {
       res.render('index', { queue: queue });
     }
   });
+};
+
+exports.clear = function(req, res) {
+  queue = clearQueue(res);
+  res.render('index', { queue: queue });
 };
