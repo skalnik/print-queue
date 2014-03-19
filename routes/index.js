@@ -4,8 +4,15 @@ var db = app.get('db')
 exports.index = function(req, res) {
   db.get('queue', function(err, value) {
     if(err) {
-      console.log("OH GOD WHAT", err);
-      // Probably render an error
+      if(err.notFound) {
+        // No queue set yet, lets fix that
+        queue = []
+        db.put('queue', JSON.stringify(queue));
+        res.render('index', { title: 'Express', queue: queue });
+      }
+      else {
+        console.log("OH GOD WHAT", err);
+      }
     }
     else {
       console.log('Got a value: ' + value)
