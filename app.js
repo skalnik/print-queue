@@ -26,10 +26,11 @@ if ('development' == app.get('env')) {
 
 var user = require('./routes/public.js');
 var admin = require('./routes/admin.js');
+var auth = express.basicAuth('admin', process.env.PASSWORD || 'butts');
 
 app.get('/', user.index);
 app.post('/', user.index);
-app.get('/clear', admin.clear);
+app.get('/clear', auth, admin.clear);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
