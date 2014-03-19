@@ -2,4 +2,9 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  form(action='/', method='post')
+    input(type='text', name='queue')
+    input(type='submit', value='Add to queue')
+  ul
+    each item in queue
+      li= item

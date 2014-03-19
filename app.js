@@ -1,14 +1,17 @@
 var express = require('express');
-var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var level = require('level');
+var app = module.exports = express();
 
-var app = express();
+var db = level(process.env.DB_PATH || './tmp/db');
+db.put('queue', JSON.stringify([]));
 
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('db', db);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -22,7 +25,10 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var routes = require('./routes');
+
 app.get('/', routes.index);
+app.post('/', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
