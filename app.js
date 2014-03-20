@@ -4,7 +4,7 @@ var path = require('path');
 var level = require('level');
 var app = module.exports = express();
 
-var db = level(process.env.DB_PATH || './tmp/db');
+var db = level(process.env.DB_PATH || './tmp/db', {valueEncoding: 'json'});
 
 // all environments
 app.set('port', process.env.PORT || 3000);

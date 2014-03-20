@@ -8,7 +8,7 @@ exports.index = function(req, res) {
     if(req.body.queue !== undefined) {
       toQueue = req.body.queue;
       queue.push(toQueue);
-      db.put('queue', JSON.stringify(queue), function(err) {
+      db.put('queue', queue, function(err) {
         res.render('error', { error: err })
       });
     }
