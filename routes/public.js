@@ -9,10 +9,10 @@ exports.index = function(req, res) {
       toQueue = req.body.queue;
       queue.push(toQueue);
       db.put('queue', queue, function(err) {
-        res.render('error', { error: err })
+        if(err) res.render('error', { error: err });
+        else res.render('index', { queue: queue });
       });
     }
-
-    res.render('index', { queue: queue });
+    else res.render('index', { queue: queue });
   });
 };
