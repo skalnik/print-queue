@@ -2,8 +2,12 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var level = require('level');
-var app = module.exports = express();
 
+var logger = require('morgan');
+var bodyParser = require('body-parser')
+var methodOverride = require('method-override');
+
+var app = module.exports = express();
 var db = level(process.env.DB_PATH || './tmp/db', {valueEncoding: 'json'});
 
 // all environments
@@ -11,11 +15,10 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.set('db', db);
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
+
+app.use(logger('dev'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
