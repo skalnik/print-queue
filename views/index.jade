@@ -3,8 +3,13 @@ extends layout
 block content
   h1 Print Queue
   form(action='/', method='post')
-    input(type='text', name='queue')
+    label(for='url') URL to print:
+    input(type='text', name='queue[url]')
+    br
+    label(for='email') Your email address:
+    input(type='text', name='queue[email]')
     input(type='submit', value='Add to queue')
+  h2 Current queue
   ul
     each item in queue
       li= item
