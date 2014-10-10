@@ -23,9 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Hand all routes the DB
+// Hand all routes the DB & password
 app.use(function(req, res, next) {
   req.db = db;
+  req.password = process.env.PASSWORD || 'butts'
   next();
 });
 
