@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
   });
 });
 
-router.post('/clear', function(req, res) {
+router.delete('/queue', function(req, res) {
   queue = clearQueue(req.db, res);
   res.redirect('/admin');
 });

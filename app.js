@@ -20,7 +20,7 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride());
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Hand all routes the DB
