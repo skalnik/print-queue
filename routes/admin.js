@@ -1,15 +1,17 @@
-var app = require('../app.js')
-var db = app.get('db')
+var express = require('express');
+var router = express.Router();
 var clearQueue = require('../lib/clearQueue.js');
 var getQueue = require('../lib/getQueue.js');
 
-exports.index = function(req, res) {
-  getQueue(db, res, function(queue) {
+router.get('/', function(req, res) {
+  getQueue(req.db, res, function(queue) {
     res.render('admin', { queue: queue });
   });
-};
+});
 
-exports.clear = function(req, res) {
-  queue = clearQueue(db, res);
+router.post('/clear', function(req, res) {
+  queue = clearQueue(req.db, res);
   res.redirect('/admin');
-};
+});
+
+module.exports = router;

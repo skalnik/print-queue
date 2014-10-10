@@ -1,9 +1,10 @@
-var app = require('../app.js')
-var db = app.get('db')
+var express = require('express');
+var router = express.Router();
 var clearQueue = require('../lib/clearQueue.js');
 var getQueue = require('../lib/getQueue.js');
 
-exports.index = function(req, res) {
+router.get('/', function(req, res) {
+  db = req.db;
   getQueue(db, res, function(queue) {
     if(req.body.queue !== undefined) {
       toQueue = req.body.queue;
@@ -15,4 +16,6 @@ exports.index = function(req, res) {
     }
     else res.render('index', { queue: queue });
   });
-};
+});
+
+module.exports = router;
