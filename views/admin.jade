@@ -6,4 +6,4 @@ block content
       input(type='submit', value='Clear Queue')
   ul
     each item in queue
-      li.queue #{item.url} for #{item.email}
+      li.queue #{item.id}: #{item.url} for #{item.email} at #{item.timestamp}
