@@ -18,6 +18,6 @@ block content
   if queue.length > 0
     ul
       each item in queue
-        li= item.url
+        li.queue= item.url
   else
     p.alert.queue Queue is empty

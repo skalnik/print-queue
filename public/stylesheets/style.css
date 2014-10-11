@@ -36,7 +36,7 @@ p.error {
   background-color: rgb(242, 222, 222);
 }
 
-p.queue {
+.queue {
   color: #fff;
   background-color: #428bca;
 }
@@ -87,4 +87,26 @@ form input[type=submit] {
 
 form input[type=submit]:hover {
   background: #eee;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+  margin: 50px 0 15px 0;
+}
+
+ul {
+  font-size: 14px;
+  padding: 10px;
+  margin: 5px 0 5px 0;
+  list-style-type: none;
+}
+
+ul li {
+  font-weight: 700;
+  text-align: center;
+  padding: 10px;
+  margin: 7px 0 5px 0;
+  line-height: 20px;
+  border-radius: 4px;
 }
