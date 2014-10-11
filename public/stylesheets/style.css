@@ -22,16 +22,23 @@ p {
   margin: 5px 0 5px 0;
 }
 
-p.error {
-  font-size: 14px;
+p.alert {
   font-weight: 700;
   text-align: center;
   padding: 10px;
   margin: 7px 0 5px 0;
   line-height: 20px;
   border-radius: 4px;
+}
+
+p.error {
   color: #555;
   background-color: rgb(242, 222, 222);
+}
+
+p.queue {
+  color: #fff;
+  background-color: #428bca;
 }
 
 form {

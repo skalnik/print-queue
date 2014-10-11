@@ -4,7 +4,7 @@ block content
   h1 Print Queue
   if errors && errors.length > 0
     each msg in errors
-      p.error= msg
+      p.alert.error= msg
   form(action='/', method='post')
     div.form-group
       label(for='url') STL URL
@@ -20,4 +20,4 @@ block content
       each item in queue
         li= item.url
   else
-    p Queue is empty!
+    p.alert.queue Queue is empty
