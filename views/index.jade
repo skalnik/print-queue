@@ -4,15 +4,15 @@ block content
   h1 Print Queue
   if errors && errors.length > 0
     each msg in errors
-      p(class='error')= msg
+      p.error= msg
   form(action='/', method='post')
-    div(class='form-group')
+    div.form-group
       label(for='url') STL URL
       input(type='text', name='queue[url]' placeholder='http://www.thingiverse.com/download:12345')
-    div(class='form-group')
+    div.form-group
       label(for='email') Your email address
       input(type='text', name='queue[email]' placeholder='example@example.com')
-    div(class='form-group')
+    div.form-group
       input(type='submit', value='Add to queue')
   h2 Current queue
   if queue.length > 0
