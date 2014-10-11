@@ -110,3 +110,13 @@ ul li {
   line-height: 20px;
   border-radius: 4px;
 }
+
+ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  color: #fff;
+  text-decoration: underline;
+}

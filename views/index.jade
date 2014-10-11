@@ -18,6 +18,7 @@ block content
   if queue.length > 0
     ul
       each item in queue
-        li.queue= item.url
+        li.queue
+          a(href=item.url)= item.url
   else
     p.alert.queue Queue is empty
