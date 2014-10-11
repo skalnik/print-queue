@@ -2,6 +2,10 @@ extends layout
 
 block content
   h1 Print Queue
+  if errors && errors.length > 0
+    ul
+      each msg in errors
+        li= msg
   form(action='/', method='post')
     label(for='url') URL to print:
     input(type='text', name='queue[url]')
@@ -12,4 +16,4 @@ block content
   h2 Current queue
   ul
     each item in queue
-      li= item
+      li= item.url

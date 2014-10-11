@@ -14,12 +14,12 @@ router.post('/', function(req, res) {
   var db = req.db;
   var locals = { queue: [], errors: [] };
   getQueue(db, res, function(queue) {
-    locals.queue = queue
+    locals.queue = queue;
     var queueItem = req.body.queue;
     if(queueItem !== undefined) {
       queueItemValid = validate(queueItem);
       if(queueItemValid.valid) {
-        queue.push(queueItem)
+        queue.push(queueItem);
         db.put('queue', queue, function(err) {
           if(err) {
             locals.errors.push("Could not update database!");
@@ -35,8 +35,8 @@ router.post('/', function(req, res) {
       }
     }
     else { locals.errors.push('Nothing submitted!') }
+    res.render('index', locals);
   });
-  res.render('index', locals);
 });
 
 module.exports = router;
