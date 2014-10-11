@@ -1,8 +1,112 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 14px 25px 0 25px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background: #282828;
+  color: #ebebeb;
 }
 
-a {
-  color: #00B7FF;
+div.container {
+  margin: 0 auto;
+  width: 600px;
+}
+
+h1 {
+  font-size: 50px;
+  text-align: center;
+  margin: 30px auto;
+}
+
+p {
+  font-size: 14px;
+  padding: 10px;
+  margin: 5px 0 5px 0;
+}
+
+p.alert {
+  font-weight: 700;
+  text-align: center;
+  padding: 10px;
+  margin: 7px 0 5px 0;
+  line-height: 20px;
+  border-radius: 4px;
+}
+
+p.error {
+  color: #555;
+  background-color: rgb(242, 222, 222);
+}
+
+.queue {
+  color: #fff;
+  background-color: #428bca;
+}
+
+form {
+  margin: 20px 0;
+}
+
+form .form-group {
+  margin: 0 0 15px 0;
+  width: 100%;
+  text-align: center;
+}
+
+form label {
+  font-size: 14px;
+  display: inline-block;
+  font-weight: 700;
+  text-align: right;
+  padding: 9px 15px 0 0;
+  float: left;
+  line-height: 20px;
+  width: 25%;
+}
+
+form input {
+  display: block;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #555;
+  font-size: 14px;
+  height: 34px;
+}
+
+form input[type=text] {
+  width: 71%;
+  margin: 0;
+  padding: 0 0 0 5px;
+}
+
+form input[type=submit] {
+  margin: 0 auto;
+  color: #333;
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+}
+
+form input[type=submit]:hover {
+  background: #eee;
+}
+
+h2 {
+  font-size: 30px;
+  text-align: center;
+  margin: 50px 0 15px 0;
+}
+
+ul {
+  font-size: 14px;
+  padding: 10px;
+  margin: 5px 0 5px 0;
+  list-style-type: none;
+}
+
+ul li {
+  font-weight: 700;
+  text-align: center;
+  padding: 10px;
+  margin: 7px 0 5px 0;
+  line-height: 20px;
+  border-radius: 4px;
 }

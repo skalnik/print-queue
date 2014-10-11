@@ -3,18 +3,21 @@ extends layout
 block content
   h1 Print Queue
   if errors && errors.length > 0
-    ul
-      each msg in errors
-        li= msg
+    each msg in errors
+      p.alert.error= msg
   form(action='/', method='post')
-    label(for='url') URL to print:
-    input(type='text', name='queue[url]')
-    br
-    label(for='email') Your email address:
-    input(type='text', name='queue[email]')
-    br
-    input(type='submit', value='Add to queue')
+    div.form-group
+      label(for='url') STL URL
+      input(type='text', name='queue[url]' placeholder='http://www.thingiverse.com/download:12345')
+    div.form-group
+      label(for='email') Your email address
+      input(type='text', name='queue[email]' placeholder='example@example.com')
+    div.form-group
+      input(type='submit', value='Add to queue')
   h2 Current queue
-  ul
-    each item in queue
-      li= item.url
+  if queue.length > 0
+    ul
+      each item in queue
+        li.queue= item.url
+  else
+    p.alert.queue Queue is empty
