@@ -4,6 +4,10 @@
   "scripts": {
     "start": "node app.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/skalnik/print-queue.git"
+  },
   "dependencies": {
     "express": "4.9.6",
     "jade": "*",
