@@ -1,12 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var QueueItem = require('../lib/queueItem.js');
 var getQueue = require('../lib/getQueue.js');
-var newItem = require('../lib/newQueueItem.js');
 
 router.get('/', function(req, res) {
-  db = req.db;
-  getQueue(db, res, function(queue) {
-    res.render('index', { queue: queue });
+  var redis = req.redis;
+  var key = req.redisKey;
+  redis.lrange(key, 0, -1, function(err, queue) {
+    if(err) { res.render('error', { error: err }) }
+    else {
+      queueItems = queue.map(function(item) {
+        return new QueueItem(JSON.parse(item));
+      });
+      res.render('index', { queue: queueItems });
+    }
   });
 });
 

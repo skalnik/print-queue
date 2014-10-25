@@ -1,7 +1,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var level = require('level');
+var redis = require('redis');
 
 var logger = require('morgan');
 var bodyParser = require('body-parser')
@@ -9,9 +9,19 @@ var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
 
 var app = express();
-var db = level(process.env.DB_PATH || './tmp/db', {valueEncoding: 'json'});
 module.exports.router = express.Router();
-module.exports.db = db;
+var redisURL = process.env.BOXEN_URL || process.env.REDISTOGO_URL;
+var redisClient;
+if(redisURL) {
+  var url = require('url').parse(redisURL);
+  redisClient = redis.createClient(url.port, url.hostname);
+  if(url.auth) {
+    redisClient.auth(url.auth.split(":")[1]);
+  }
+}
+else {
+  redisClient = redis.createClient();
+}
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -25,7 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Hand all routes the DB & password
 app.use(function(req, res, next) {
-  req.db = db;
+  req.redis = redisClient;
+  req.redisKey = 'skalnik:print-queue';
   req.password = process.env.PASSWORD || 'butts'
   next();
 });
