@@ -17,6 +17,8 @@
     "errorhandler": "~1.2.0",
     "basic-auth": "~1.0.0",
     "validator": "~3.19.1",
-    "redis": "~0.12.1"
+    "redis": "~0.12.1",
+    "connect-flash": "~0.1.1",
+    "express-session": "~1.9.1"
   }
 }

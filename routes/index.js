@@ -3,19 +3,20 @@ var router = express.Router();
 var QueueItem = require('../lib/queueItem.js');
 
 router.get('/', function(req, res) {
+  var locals = {queue: [], errors: req.flash('errors') }
   req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
     if(err) { res.render('error', { error: err }) }
     else {
-      queueItems = queue.map(function(item) {
+      locals.queue = queue.map(function(item) {
         return new QueueItem(JSON.parse(item));
       });
-      res.render('index', { queue: queueItems });
+      res.render('index', locals);
     }
   });
 });
 
 router.post('/', function(req, res) {
-  var locals = { queue: [], errors: [] };
+  var errors = []
   var queueItem = new QueueItem(req.body.queue);
   if(queueItem && queueItem.valid()) {
     req.redis.lpush(req.redisKey, JSON.stringify(queueItem), function(err) {
@@ -23,21 +24,13 @@ router.post('/', function(req, res) {
     });
   }
   else {
-    errors = queueItem.errors()
-    for(var i = 0; i < errors.length; i++) {
-      locals.errors.push(errors[i]);
+    errMsgs = queueItem.errors()
+    for(var i = 0; i < errMsgs.length; i++) {
+      errors.push(errMsgs[i]);
     }
+    req.flash('errors', errors)
   }
-
-  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
-    if(err) { locals.errors.push("Could not get queue: " + err) }
-    else {
-      queueItems = queue.map(function(item) {
-        return new QueueItem(JSON.parse(item));
-      });
-      res.render('index', { queue: queueItems });
-    }
-  });
+  res.redirect('/');
 });
 
 module.exports = router;

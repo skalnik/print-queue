@@ -7,6 +7,8 @@ var logger = require('morgan');
 var bodyParser = require('body-parser')
 var methodOverride = require('method-override');
 var errorHandler = require('errorhandler');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var app = express();
 module.exports.router = express.Router();
@@ -32,6 +34,8 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({saveUninitialized: false, resave: false, secret: 'giro is a cat'}));
+app.use(flash());
 
 // Hand all routes the DB & password
 app.use(function(req, res, next) {
