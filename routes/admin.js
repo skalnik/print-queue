@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('basic-auth');
-var clearQueue = require('../lib/clearQueue.js');
-var getQueue = require('../lib/getQueue.js');
-var removeItem = require('../lib/removeItem.js');
+var QueueItem = require('../lib/queueItem.js');
 
 router.all('*', function(req, res, next) {
   user = auth(req);
@@ -17,20 +15,24 @@ router.all('*', function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
-  getQueue(req.db, res, function(queue) {
-    res.render('admin', { queue: queue });
+  var locals = {queue: [], errors: req.flash('errors') }
+  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
+    if(err) { res.render('error', { error: err }) }
+    else {
+      locals.queue = queue.map(function(item) {
+        return new QueueItem(JSON.parse(item));
+      });
+      res.render('admin', locals);
+    }
   });
 });
 
 router.delete('/queue', function(req, res) {
-  queue = clearQueue(req.db, res);
+  req.redis.del(req.redisKey);
   res.redirect('/admin');
 });
 
 router.delete('/queue/:id', function(req, res) {
-  console.log("Cockass: ", req.params.id)
-  var id = req.params.id;
-  var item = removeItem(req.db, res, id);
   res.redirect('/admin');
 });
 
