@@ -1,12 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var QueueItem = require('../lib/queueItem.js');
-var getQueue = require('../lib/getQueue.js');
 
 router.get('/', function(req, res) {
-  var redis = req.redis;
-  var key = req.redisKey;
-  redis.lrange(key, 0, -1, function(err, queue) {
+  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
     if(err) { res.render('error', { error: err }) }
     else {
       queueItems = queue.map(function(item) {
@@ -18,27 +15,29 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function(req, res) {
-  var db = req.db;
   var locals = { queue: [], errors: [] };
-  getQueue(db, res, function(queue) {
-    locals.queue = queue;
-    var queueItem = newItem(req.body.queue);
-    if(queueItem && queueItem.valid) {
-      queue.push(queueItem);
-      db.put('queue', queue, function(err) {
-        if(err) {
-          locals.errors.push("Could not update database!");
-          locals.errors.push(err);
-        }
-      });
+  var queueItem = new QueueItem(req.body.queue);
+  if(queueItem && queueItem.valid()) {
+    req.redis.lpush(req.redisKey, JSON.stringify(queueItem), function(err) {
+      if(err) { local.errors.push("Could not save item: " + err); }
+      else { locals.queue.push(queueItem); }
+    });
+  }
+  else {
+    errors = queueItem.errors()
+    for(var i = 0; i < errors.length; i++) {
+      locals.errors.push(errors[i]);
     }
+  }
+
+  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
+    if(err) { locals.errors.push("Could not get queue: " + err) }
     else {
-      for(var i in queueItem.errors) {
-        msg = queueItem.errors[i];
-        locals.errors.push(msg);
-      }
+      queueItems = queue.map(function(item) {
+        return new QueueItem(JSON.parse(item));
+      });
+      res.render('index', { queue: queueItems });
     }
-    res.render('index', locals);
   });
 });
 
