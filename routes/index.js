@@ -20,7 +20,6 @@ router.post('/', function(req, res) {
   if(queueItem && queueItem.valid()) {
     req.redis.lpush(req.redisKey, JSON.stringify(queueItem), function(err) {
       if(err) { local.errors.push("Could not save item: " + err); }
-      else { locals.queue.push(queueItem); }
     });
   }
   else {
