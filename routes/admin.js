@@ -33,6 +33,7 @@ router.delete('/queue', function(req, res) {
 });
 
 router.delete('/queue/:id', function(req, res) {
+  req.flash('errors', ['Not implemented yet']);
   res.redirect('/admin');
 });
 
