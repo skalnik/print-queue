@@ -16,7 +16,7 @@ router.all('*', function(req, res, next) {
 
 router.get('/', function(req, res) {
   var locals = {queue: [], errors: req.flash('errors') }
-  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
+  req.redis.zrange(req.redisKey, 0, -1, function(err, queue) {
     if(err) { res.render('error', { error: err }) }
     else {
       locals.queue = queue.map(function(item) {

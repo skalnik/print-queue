@@ -4,7 +4,7 @@ var QueueItem = require('../lib/queueItem.js');
 
 router.get('/', function(req, res) {
   var locals = {queue: [], errors: req.flash('errors') }
-  req.redis.lrange(req.redisKey, 0, -1, function(err, queue) {
+  req.redis.zrange(req.redisKey, 0, -1, function(err, queue) {
     if(err) { res.render('error', { error: err }) }
     else {
       locals.queue = queue.map(function(item) {
@@ -19,8 +19,8 @@ router.post('/', function(req, res) {
   var errors = []
   var queueItem = new QueueItem(req.body.queue);
   if(queueItem && queueItem.valid()) {
-    req.redis.lpush(req.redisKey, JSON.stringify(queueItem), function(err) {
-      if(err) { local.errors.push("Could not save item: " + err); }
+    req.redis.zadd(req.redisKey, queueItem.timestamp, JSON.stringify(queueItem), function(err) {
+      if(err) { errors.push("Could not save item: " + err); }
     });
   }
   else {
