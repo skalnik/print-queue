@@ -32,8 +32,28 @@ router.delete('/queue', function(req, res) {
   res.redirect('/admin');
 });
 
-router.delete('/queue/:id', function(req, res) {
-  req.flash('errors', ['Not implemented yet']);
+router.delete('/queue/:timestamp/:item_id', function(req, res) {
+  var redis = req.redis;
+  var key = req.redisKey;
+  var timestamp = req.params.timestamp;
+  var itemId = req.params.item_id;
+  redis.zrangebyscore(key, timestamp, timestamp, function(err, queueItems){
+    if (err) { console.log("Error: ", error) }
+    else {
+      var queueItem;
+      // Only 1 result? Sweet!
+      if(queueItems.length === 1) {
+        queueItem = new QueueItem(JSON.parse(queueItems[0]));
+      }
+      // More than 1 at the same time stamp? Lets filter by ID
+      else {
+        queueItems = queueItems.map(function(item) { return new QueueItem(JSON.parse(item)) });
+        queueItemIndex = queueItems.findIndex(function(item) { return itemId === item.id });
+        queueItem = queueItems[queueItemIndex];
+      }
+      redis.zrem(key, JSON.stringify(queueItem));
+    }
+  });
   res.redirect('/admin');
 });
 

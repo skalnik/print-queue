@@ -10,5 +10,5 @@ block content
   ul
     each item in queue
       li.queue #{item.id}: #{item.url} for #{item.email} at #{item.timestamp}
-        form(action="/admin/queue/#{item.id}?_method=DELETE", method='post')
+        form(action="/admin/queue/#{item.timestamp}/#{item.id}?_method=DELETE", method='post')
           input(type='submit', value='Delete item')
