@@ -19,17 +19,22 @@ router.post('/', function(req, res) {
   var errors = []
   var queueItem = new QueueItem(req.body.queue);
   if(queueItem && queueItem.valid()) {
-    req.redis.zadd(req.redisKey, queueItem.timestamp, JSON.stringify(queueItem), function(err) {
-      if(err) { errors.push("Could not save item: " + err); }
-    });
+    req.redis.incr(req.redisKey + ":id", function(err, id) {
+      if(err) { errors.push("Could not save item: " + err); res.redirect('/'); }
+      else {
+        queueItem.id = id;
+        req.redis.zadd(req.redisKey, id, JSON.stringify(queueItem), function(err) {
+          if(err) { errors.push("Could not save item: " + err); }
+        });
+      }
+    })
   }
   else {
-    errMsgs = queueItem.errors()
+    errMsgs = queueItem.errors();
     for(var i = 0; i < errMsgs.length; i++) {
       errors.push(errMsgs[i]);
     }
   }
-  req.flash('errors', errors);
   res.redirect('/');
 });
 

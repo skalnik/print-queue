@@ -32,26 +32,17 @@ router.delete('/queue', function(req, res) {
   res.redirect('/admin');
 });
 
-router.delete('/queue/:timestamp/:item_id', function(req, res) {
+router.delete('/queue/:id', function(req, res) {
   var redis = req.redis;
   var key = req.redisKey;
-  var timestamp = req.params.timestamp;
-  var itemId = req.params.item_id;
-  redis.zrangebyscore(key, timestamp, timestamp, function(err, queueItems) {
-    if (err) { req.flash('errors', "Couldn't look up item to delete"); res.redirect('/admin') }
+  var itemId = req.params.id;
+  redis.zrangebyscore(key, itemId, itemId, function(err, queueItems) {
+    if (err) { req.flash('errors', "Couldn't find item to delete"); res.redirect('/admin') }
     else {
-      var queueItem;
-      // Only 1 result? Sweet!
-      if(queueItems.length === 1) {
-        queueItem = new QueueItem(JSON.parse(queueItems[0]));
+      if (queueItems.length > 1) {
+        req.flash('errors', 'Found more than one item for that ID')
       }
-      // More than 1 at the same time stamp? Lets filter by ID
-      else {
-        queueItems = queueItems.map(function(item) { return new QueueItem(JSON.parse(item)) });
-        queueItemIndex = queueItems.findIndex(function(item) { return itemId === item.id });
-        queueItem = queueItems[queueItemIndex];
-      }
-
+      queueItem = new QueueItem(JSON.parse(queueItems[0]));
       // Delete the item
       redis.zrem(key, JSON.stringify(queueItem), function(err, item) {
         if(err) { req.flash('errors', [err]) }
