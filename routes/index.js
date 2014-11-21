@@ -28,8 +28,8 @@ router.post('/', function(req, res) {
     for(var i = 0; i < errMsgs.length; i++) {
       errors.push(errMsgs[i]);
     }
-    req.flash('errors', errors)
   }
+  req.flash('errors', errors);
   res.redirect('/');
 });
 

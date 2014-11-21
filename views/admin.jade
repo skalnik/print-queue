@@ -2,6 +2,8 @@ extends layout
 
 block content
   h1 Print Queue Admin
+  if message
+    p.alert.msg= message
   if errors && errors.length > 0
     each msg in errors
       p.alert.error= msg

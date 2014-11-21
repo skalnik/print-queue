@@ -15,7 +15,7 @@ router.all('*', function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
-  var locals = {queue: [], errors: req.flash('errors') }
+  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] }
   req.redis.zrange(req.redisKey, 0, -1, function(err, queue) {
     if(err) { res.render('error', { error: err }) }
     else {
@@ -37,8 +37,8 @@ router.delete('/queue/:timestamp/:item_id', function(req, res) {
   var key = req.redisKey;
   var timestamp = req.params.timestamp;
   var itemId = req.params.item_id;
-  redis.zrangebyscore(key, timestamp, timestamp, function(err, queueItems){
-    if (err) { console.log("Error: ", error) }
+  redis.zrangebyscore(key, timestamp, timestamp, function(err, queueItems) {
+    if (err) { req.flash('errors', "Couldn't look up item to delete"); res.redirect('/admin') }
     else {
       var queueItem;
       // Only 1 result? Sweet!
@@ -51,10 +51,15 @@ router.delete('/queue/:timestamp/:item_id', function(req, res) {
         queueItemIndex = queueItems.findIndex(function(item) { return itemId === item.id });
         queueItem = queueItems[queueItemIndex];
       }
-      redis.zrem(key, JSON.stringify(queueItem));
+
+      // Delete the item
+      redis.zrem(key, JSON.stringify(queueItem), function(err, item) {
+        if(err) { req.flash('errors', [err]) }
+        else { req.flash('message', 'Queue item deleted!'); }
+        res.redirect('/admin');
+      });
     }
   });
-  res.redirect('/admin');
 });
 
 module.exports = router;
