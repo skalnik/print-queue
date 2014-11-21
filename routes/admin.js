@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('basic-auth');
-var clearQueue = require('../lib/clearQueue.js');
-var getQueue = require('../lib/getQueue.js');
+var QueueItem = require('../lib/queueItem.js');
 
 router.all('*', function(req, res, next) {
   user = auth(req);
@@ -16,13 +15,45 @@ router.all('*', function(req, res, next) {
 });
 
 router.get('/', function(req, res) {
-  getQueue(req.db, res, function(queue) {
-    res.render('admin', { queue: queue });
+  var locals = {queue: [], errors: req.flash('errors') }
+  req.redis.zrange(req.redisKey, 0, -1, function(err, queue) {
+    if(err) { res.render('error', { error: err }) }
+    else {
+      locals.queue = queue.map(function(item) {
+        return new QueueItem(JSON.parse(item));
+      });
+      res.render('admin', locals);
+    }
   });
 });
 
 router.delete('/queue', function(req, res) {
-  queue = clearQueue(req.db, res);
+  req.redis.del(req.redisKey);
+  res.redirect('/admin');
+});
+
+router.delete('/queue/:timestamp/:item_id', function(req, res) {
+  var redis = req.redis;
+  var key = req.redisKey;
+  var timestamp = req.params.timestamp;
+  var itemId = req.params.item_id;
+  redis.zrangebyscore(key, timestamp, timestamp, function(err, queueItems){
+    if (err) { console.log("Error: ", error) }
+    else {
+      var queueItem;
+      // Only 1 result? Sweet!
+      if(queueItems.length === 1) {
+        queueItem = new QueueItem(JSON.parse(queueItems[0]));
+      }
+      // More than 1 at the same time stamp? Lets filter by ID
+      else {
+        queueItems = queueItems.map(function(item) { return new QueueItem(JSON.parse(item)) });
+        queueItemIndex = queueItems.findIndex(function(item) { return itemId === item.id });
+        queueItem = queueItems[queueItemIndex];
+      }
+      redis.zrem(key, JSON.stringify(queueItem));
+    }
+  });
   res.redirect('/admin');
 });
 

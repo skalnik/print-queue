@@ -2,8 +2,13 @@ extends layout
 
 block content
   h1 Print Queue Admin
-    form(action='/admin/queue?_method=DELETE', method='post')
-      input(type='submit', value='Clear Queue')
+  if errors && errors.length > 0
+    each msg in errors
+      p.alert.error= msg
+  form(action='/admin/queue?_method=DELETE', method='post')
+    input(type='submit', value='Clear Queue')
   ul
     each item in queue
-      li.queue #{item.url} for #{item.email}
+      li.queue #{item.id}: #{item.url} for #{item.email} at #{item.timestamp}
+        form(action="/admin/queue/#{item.timestamp}/#{item.id}?_method=DELETE", method='post')
+          input(type='submit', value='Delete item')
