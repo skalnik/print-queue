@@ -12,7 +12,7 @@ var session = require('express-session');
 
 var app = express();
 module.exports.router = express.Router();
-var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISTOGO_URL || process.env.REDIS_URL;
+var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL;
 var redisClient;
 if(redisURL) {
   var url = require('url').parse(redisURL);
