@@ -12,5 +12,12 @@ block content
   ul
     each item in queue
       li.queue #{item.id}: #{item.url} for #{item.email} at #{item.timestamp}
+        form(action="/admin/queue/#{item.id}?_method=PATCH", method='post')
+          if item.queued
+            input(type='hidden', name='queued', value='')
+            input(type='submit', value='Unqueue item')
+          else
+            input(type='hidden', name='queued', value='true')
+            input(type='submit', value='Queue item')
         form(action="/admin/queue/#{item.id}?_method=DELETE", method='post')
           input(type='submit', value='Delete item')
