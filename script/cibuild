@@ -1,0 +1,5 @@
+#!/bin/sh
+
+npm install
+
+jslint --sloppy --plusplus --indent 2 **/*.js

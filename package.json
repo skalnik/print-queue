@@ -2,7 +2,8 @@
   "name": "print-queue",
   "version": "0.0.1",
   "scripts": {
-    "start": "node app.js"
+    "start": "script/server",
+    "test": "script/cibuild"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,9 @@
     "redis": "~0.12.1",
     "connect-flash": "~0.1.1",
     "express-session": "~1.9.1"
+  },
+  "devDependencies": {
+    "jslint": "~0.6.6"
   }
+
 }
