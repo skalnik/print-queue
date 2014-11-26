@@ -2,4 +2,4 @@
 
 npm install
 
-jslint **/*.js
+jslint --sloppy --indent 2 **/*.js
