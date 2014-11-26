@@ -5,16 +5,17 @@ Redis. Giggle at my terrible code.
 
 ## How the fuck does this work?
 
-Step 0: Have node & redis installed
+First ensure you have redis & node installed.
+
+Then:
 
 ```
 $ git clone https://github.com/skalnik/print-queue.git
 $ cd print-queue
-$ npm install
-$ REDIS_URL=redis://127.0.0.1:16379 node app.js
+$ REDIS_URL=redis://127.0.0.1:16379 npm start
 ```
 
-Then open your browser and go to [localhost:3000](http://localhost:3000) :eyes:
+Then go to [localhost:3000](http://localhost:3000) :eyes:
 
 ![Whats it look like](http://cloud.mikeskalnik.com/image/0f042P0g1y2d/Screen%20Shot%202014-10-10%20at%209.00.59%20PM.png)
 
