@@ -33,23 +33,52 @@ router.delete('/queue', function (req, res) {
   res.redirect('/admin');
 });
 
+router.patch('/queue/:id', function (req, res) {
+  var redis = req.redis,
+    key = req.redisKey,
+    itemId = req.params.id;
+  QueueItem.find(redis, key, itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/admin');
+    } else {
+      var objKey,
+        updatedQueueItem = new QueueItem(JSON.parse(JSON.stringify(queueItem)));
+      for (objKey in updatedQueueItem) {
+        if (updatedQueueItem.hasOwnProperty(objKey) && // Does the object have this?
+            (req.param(objKey) !== null && req.param(objKey) !== undefined) && // Does it exist?
+            (updatedQueueItem[objKey] !== req.param(objKey))) { // Is it different?
+          updatedQueueItem[objKey] = req.body[objKey];
+        }
+      }
+
+      redis.multi()
+        .zrem(key, JSON.stringify(queueItem))
+        .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
+        .exec(function (err) {
+          if (err) {
+            req.flash('errors', [err.message]);
+          } else {
+            req.flash('message', 'Queue Item updated!');
+          }
+          res.redirect('/admin');
+        });
+    }
+  });
+});
+
 router.delete('/queue/:id', function (req, res) {
   var redis = req.redis,
     key = req.redisKey,
     itemId = req.params.id;
-  redis.zrangebyscore(key, itemId, itemId, function (err, queueItems) {
+  QueueItem.find(redis, key, itemId, function (err, queueItem) {
     if (err) {
-      req.flash('errors', "Couldn't find item to delete");
+      req.flash('errors', [err.message]);
       res.redirect('/admin');
     } else {
-      if (queueItems.length > 1) {
-        req.flash('errors', 'Found more than one item for that ID');
-      }
-      var queueItem = new QueueItem(JSON.parse(queueItems[0]));
-      // Delete the item
       redis.zrem(key, JSON.stringify(queueItem), function (err) {
         if (err) {
-          req.flash('errors', [err]);
+          req.flash('errors', [err.message]);
         } else {
           req.flash('message', 'Queue item deleted!');
         }
