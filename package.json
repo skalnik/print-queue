@@ -1,6 +1,9 @@
 {
   "name": "print-queue",
   "version": "0.0.1",
+  "engines": {
+    "node": "0.10.x"
+  },
   "scripts": {
     "start": "script/server",
     "test": "script/cibuild"
@@ -23,7 +26,7 @@
     "express-session": "~1.9.1"
   },
   "devDependencies": {
-    "jslint": "~0.6.6"
+    "jslint": "~0.6.6",
+    "nodemon": "~1.2.1"
   }
-
 }
