@@ -1,4 +1,13 @@
 #!/bin/sh
 
 npm install
-node app.js
+
+if [[ -z $NODE_ENV ]]; then
+  export NODE_ENV=development
+fi
+
+if [ "$NODE_ENV" = 'development' ]; then
+  nodemon app.js
+else
+  node app.js
+fi
