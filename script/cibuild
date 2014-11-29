@@ -2,4 +2,4 @@
 
 npm install
 
-jslint --sloppy --plusplus --node --unparam --indent 2 *.js **/*.js
+jslint --sloppy --plusplus --node --unparam --nomen --indent 2 *.js **/*.js
