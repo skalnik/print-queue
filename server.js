@@ -1,8 +1,8 @@
 var http = require('http');
 
-module.exports = function(app) {
-  var user = require('./routes');
-  var admin = require('./routes/admin.js');
+module.exports = function (app) {
+  var user = require('./routes'),
+    admin  = require('./routes/admin.js');
 
   app.use('/', user);
   app.use('/admin', admin);
