@@ -1,30 +1,32 @@
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var redis = require('redis');
+var express         = require('express'),
+  path              = require('path'),
+  logger            = require('morgan'),
+  bodyParser        = require('body-parser'),
+  methodOverride    = require('method-override'),
+  flash             = require('connect-flash'),
+  session           = require('express-session'),
+  redis             = require('redis'),
+  RedisSessionStore = require('connect-redis')(session);
 
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var errorHandler = require('errorhandler');
-var flash = require('connect-flash');
-var session = require('express-session');
-
-var app = express();
-module.exports.router = express.Router();
+// Setup redis for session store & general DB usage
 var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL;
-var redisClient;
+var db;
+
 if (redisURL) {
   var url = require('url').parse(redisURL);
-  redisClient = redis.createClient(url.port, url.hostname);
+  db = redis.createClient(url.port, url.hostname);
+
   if (url.auth) {
-    redisClient.auth(url.auth.split(":")[1]);
+    db.auth(url.auth.split(":")[1]);
   }
 } else {
-  redisClient = redis.createClient();
+  db = redis.createClient();
 }
 
-// all environments
+// Setup express
+var app = express();
+module.exports.router = express.Router();
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -33,28 +35,22 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({saveUninitialized: false, resave: false, secret: 'giro is a cat'}));
 app.use(flash());
+app.use(session({
+  store:             new RedisSessionStore({client: db}),
+  saveUninitialized: false,
+  resave:            false,
+  secret:            process.env.SESSION_SECRET || 'giro is a cat'
+}));
 
-// Hand all routes the DB & password
+
+// A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
-  req.redis = redisClient;
+  req.redis = db;
   req.redisKey = 'skalnik:print-queue';
   req.password = process.env.PASSWORD || 'butts';
   next();
 });
 
-// development only
-if ('development' === app.settings.env) {
-  app.use(errorHandler());
-}
-
-var user = require('./routes');
-var admin = require('./routes/admin.js');
-
-app.use('/', user);
-app.use('/admin', admin);
-
-http.createServer(app).listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
-});
+// Done setting things up, lets start the server
+require('./server')(app);
