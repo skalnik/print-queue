@@ -43,7 +43,6 @@ app.use(session({
   secret:            process.env.SESSION_SECRET || 'giro is a cat'
 }));
 
-
 // A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
   req.redis = db;
