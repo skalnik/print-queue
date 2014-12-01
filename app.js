@@ -56,7 +56,7 @@ app.use(session({
 passwordless.init(passwordlessStore);
 passwordless.addDelivery(function (token, uid, recipient, callback) {
   var url, msg;
-  url = app.get('host') + "deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
+  url = app.get('host') + "/deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
   msg = {
     "From": "print.queue@mikeskalnik.com",
     "To": recipient,
