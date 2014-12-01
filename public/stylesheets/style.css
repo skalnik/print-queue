@@ -36,6 +36,11 @@ p.error {
   background-color: rgb(242, 222, 222);
 }
 
+p.msg {
+  color: #555;
+  background-color: #dff0d8;
+}
+
 .queue {
   color: #fff;
   background-color: #428bca;
@@ -119,4 +124,15 @@ ul li a {
 ul li a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+li form.delete {
+  display: inline-block;
+  margin: 0;
+  float: left;
+}
+
+li form.delete input[type=submit] {
+  margin-top: -25px;
+  height: 30px;
 }

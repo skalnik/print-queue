@@ -4,7 +4,7 @@ var QueueItem = require('../lib/queueItem.js');
 var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
-  var locals = { queue: [], errors: req.flash('errors') };
+  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
   req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
     if (err) {
       res.render('error', { error: err });
@@ -58,6 +58,7 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
     }
   });
 }), function (req, res) {
+  req.flash('message', 'Check your email for deletion instructions');
   res.redirect('/');
 });
 

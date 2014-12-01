@@ -2,6 +2,8 @@ extends layout
 
 block content
   h1 Print Queue
+  if message
+    p.alert.msg= message
   if errors && errors.length > 0
     each msg in errors
       p.alert.error= msg
@@ -20,9 +22,9 @@ block content
       each item in queue
         li.queue
           a(href=item.url)= item.url
-        form.delete(action="/requestToken", method='post')
-          input(type='hidden', name='itemId', value=item.id)
-          input(type='hidden', name='user', value=item.email)
-          input(type='submit', value='Delete item')
+          form.delete(action="/requestToken", method='post')
+            input(type='hidden', name='itemId', value=item.id)
+            input(type='hidden', name='user', value=item.email)
+            input.delete(type='submit' value='Delete')
   else
     p.alert.queue Queue is empty
