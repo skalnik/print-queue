@@ -67,10 +67,10 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
     if (err) {
       console.log("Failed to send message: ", msg);
       console.log(err);
-      callback(err);
     } else {
       console.log("Successfully sent message: ", msg);
     }
+    callback();
   });
 });
 app.use(passwordless.acceptToken());
