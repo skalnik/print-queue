@@ -67,8 +67,7 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
     callback(err);
   });
 });
-app.use(passwordless.sessionSupport());
-app.use(passwordless.acceptToken({ successRedirect: '/'}));
+app.use(passwordless.acceptToken());
 
 // A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
