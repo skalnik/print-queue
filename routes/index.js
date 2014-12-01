@@ -39,7 +39,7 @@ router.post('/', function (req, res) {
       errors.push(errMsgs[i]);
     }
   }
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     req.flash('errors', errors);
   }
   res.redirect('/');
