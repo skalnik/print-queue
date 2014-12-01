@@ -13,7 +13,8 @@ var express          = require('express'),
 
 // Setup redis for session store, general DB usage, and passwordless storage
 var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL,
-  db, passwordlessStore;
+  db,
+  passwordlessStore;
 
 if (redisURL) {
   var url = require('url').parse(redisURL),
