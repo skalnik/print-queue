@@ -62,17 +62,17 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
   res.redirect('/');
 });
 
-router.get('/deleteItem', passwordless.acceptToken(), function(req, res) {
+router.get('/deleteItem', passwordless.acceptToken(), function (req, res) {
   var redis = req.redis,
     key = req.redisKey,
     itemId = req.itemId;
   if (itemId) {
-    QueueItem.find(redis, key, itemId, function(err, queueItem) {
+    QueueItem.find(redis, key, itemId, function (err, queueItem) {
       if (err) {
         req.flash('errors', [err.message]);
         res.redirect('/');
       } else {
-        redis.zrem(key, JSON.stringify(queueItem), function(err) {
+        redis.zrem(key, JSON.stringify(queueItem), function (err) {
           if (err) {
             req.flash('errors', [err.message]);
           } else {
