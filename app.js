@@ -53,7 +53,7 @@ app.use(session({
 }));
 
 // Setup passwordless
-passwordless.init(passwordlessStore);
+passwordless.init(passwordlessStore, { userProperty: 'itemId' });
 passwordless.addDelivery(function (token, uid, recipient, callback) {
   var url, msg;
   url = app.get('host') + "/deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
@@ -73,7 +73,6 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
     callback();
   });
 });
-app.use(passwordless.acceptToken());
 
 // A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
