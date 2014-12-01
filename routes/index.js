@@ -43,7 +43,7 @@ router.post('/', function (req, res) {
 });
 
 router.post('/requestToken', passwordless.requestToken(function (itemId, delivery, callback, req) {
-  QueueItem.find(req.redis, req.redisKey, itemId, function (err, queueItem) {
+  QueueItem.find(req.redis, req.redisKey, req.param('itemId'), function (err, queueItem) {
     if (err) {
       callback(err, null);
     } else {
@@ -54,7 +54,7 @@ router.post('/requestToken', passwordless.requestToken(function (itemId, deliver
       }
     }
   });
-}, { userField: 'itemId' }), function (req, res) {
+}), function (req, res) {
   res.redirect('/');
 });
 
