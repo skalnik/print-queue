@@ -38,6 +38,7 @@ module.exports.router = express.Router();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('host', process.env.HOST || "http://localhost:" + app.get('port'));
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -55,12 +56,12 @@ app.use(session({
 passwordless.init(passwordlessStore);
 passwordless.addDelivery(function (token, uid, recipient, callback) {
   var url, msg;
-  url = app.get('html host') + "?token=" + token + "&uid=" + encodeURIComponent(uid);
+  url = app.get('host') + "deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
   msg = {
     "From": "print.queue@mikeskalnik.com",
     "To": recipient,
     "Subject": "Your Print Queue Item Deletion URL",
-    "TextBody": "Hello,\n\n: To delete your Print Queue item click here: " + url
+    "TextBody": "Hello,\n\nTo delete your Print Queue item click here: " + url
   };
   email.send(msg, function (err) {
     if (err) {
