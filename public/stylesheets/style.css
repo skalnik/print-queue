@@ -1,3 +1,5 @@
+@import 'tipsy.css';
+
 body {
   padding: 14px 25px 0 25px;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -133,6 +135,6 @@ li form.delete {
 }
 
 li form.delete input[type=submit] {
-  margin-top: -25px;
+  margin-top: -5px;
   height: 30px;
 }

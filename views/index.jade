@@ -25,6 +25,6 @@ block content
           form.delete(action="/requestToken", method='post')
             input(type='hidden', name='itemId', value=item.id)
             input(type='hidden', name='user', value=item.email)
-            input.delete(type='submit' value='Delete')
+            input.delete(type='submit' value='Delete' title='This requires access to the email item was queued with')
   else
     p.alert.queue Queue is empty
