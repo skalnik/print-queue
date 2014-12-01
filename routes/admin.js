@@ -48,7 +48,7 @@ router.patch('/queue/:id', function (req, res) {
         if (updatedQueueItem.hasOwnProperty(objKey) && // Does the object have this?
             (req.param(objKey) !== null && req.param(objKey) !== undefined) && // Does it exist?
             (updatedQueueItem[objKey] !== req.param(objKey))) { // Is it different?
-          updatedQueueItem[objKey] = req.body[objKey];
+          updatedQueueItem[objKey] = req.param(objKey);
         }
       }
 

@@ -1,3 +1,5 @@
+@import 'tipsy.css';
+
 body {
   padding: 14px 25px 0 25px;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -34,6 +36,11 @@ p.alert {
 p.error {
   color: #555;
   background-color: rgb(242, 222, 222);
+}
+
+p.msg {
+  color: #555;
+  background-color: #dff0d8;
 }
 
 .queue {
@@ -119,4 +126,15 @@ ul li a {
 ul li a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+li form.delete {
+  display: inline-block;
+  margin: 0;
+  float: left;
+}
+
+li form.delete input[type=submit] {
+  margin-top: -5px;
+  height: 30px;
 }

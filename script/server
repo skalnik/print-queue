@@ -1,13 +1,14 @@
 #!/bin/sh
 
-npm install
-
 if [[ -z $NODE_ENV ]]; then
   export NODE_ENV=development
 fi
 
+script/bootstrap
+
 if [ "$NODE_ENV" = 'development' ]; then
-  nodemon app.js
+  echo "Running Print Queue in Development"
+  watchify client/*.js -o public/javascripts/main.js -v & nodemon app.js
 else
   node app.js
 fi

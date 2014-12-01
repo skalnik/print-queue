@@ -1,60 +1,86 @@
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var redis = require('redis');
+var express          = require('express'),
+  path               = require('path'),
+  logger             = require('morgan'),
+  bodyParser         = require('body-parser'),
+  methodOverride     = require('method-override'),
+  flash              = require('connect-flash'),
+  session            = require('express-session'),
+  passwordless       = require('passwordless'),
+  email              = require('postmark')(process.env.POSTMARK_API_KEY),
+  redis              = require('redis'),
+  RedisSessionStore  = require('connect-redis')(session),
+  RedisPasswordStore = require('passwordless-redisstore');
 
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
-var errorHandler = require('errorhandler');
-var flash = require('connect-flash');
-var session = require('express-session');
+// Setup redis for session store, general DB usage, and passwordless storage
+var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL,
+  db,
+  passwordlessStore;
 
-var app = express();
-module.exports.router = express.Router();
-var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL;
-var redisClient;
 if (redisURL) {
-  var url = require('url').parse(redisURL);
-  redisClient = redis.createClient(url.port, url.hostname);
+  var url = require('url').parse(redisURL),
+    options = {};
+
   if (url.auth) {
-    redisClient.auth(url.auth.split(":")[1]);
+    options = { auth_pass: url.auth.split(":")[1] };
   }
+
+  db = redis.createClient(url.port, url.hostname, options);
+  passwordlessStore = new RedisPasswordStore(url.port, url.hostname, options);
 } else {
-  redisClient = redis.createClient();
+  db = redis.createClient();
+  passwordlessStore = new RedisPasswordStore();
 }
 
-// all environments
+// Setup express
+var app = express();
+module.exports.router = express.Router();
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('host', process.env.HOST || "http://localhost:" + app.get('port'));
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({saveUninitialized: false, resave: false, secret: 'giro is a cat'}));
 app.use(flash());
+app.use(session({
+  store:             new RedisSessionStore({ client: db }),
+  saveUninitialized: false,
+  resave:            false,
+  secret:            process.env.SESSION_SECRET || 'giro is a cat'
+}));
 
-// Hand all routes the DB & password
+// Setup passwordless
+passwordless.init(passwordlessStore, { userProperty: 'itemId' });
+passwordless.addDelivery(function (token, uid, recipient, callback) {
+  var url, msg;
+  url = app.get('host') + "/deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
+  msg = {
+    "From": "print.queue@mikeskalnik.com",
+    "To": recipient,
+    "Subject": "Your Print Queue Item Deletion URL",
+    "TextBody": "Hello,\n\nTo delete your Print Queue item click here: " + url
+  };
+  email.send(msg, function (err) {
+    if (err) {
+      console.log("Failed to send message: ", msg);
+      console.log(err);
+    } else {
+      console.log("Successfully sent message: ", msg);
+    }
+    callback();
+  });
+});
+
+// A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
-  req.redis = redisClient;
+  req.redis = db;
   req.redisKey = 'skalnik:print-queue';
   req.password = process.env.PASSWORD || 'butts';
   next();
 });
 
-// development only
-if ('development' === app.settings.env) {
-  app.use(errorHandler());
-}
-
-var user = require('./routes');
-var admin = require('./routes/admin.js');
-
-app.use('/', user);
-app.use('/admin', admin);
-
-http.createServer(app).listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
-});
+// Done setting things up, lets start the server
+require('./server')(app);

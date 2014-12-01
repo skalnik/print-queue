@@ -1,5 +1,5 @@
 #!/bin/sh
 
-npm install
+script/bootstrap
 
 jslint --sloppy --plusplus --node --unparam --nomen --indent 2 *.js **/*.js
