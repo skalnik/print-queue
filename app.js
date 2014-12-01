@@ -57,10 +57,10 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
   var url, msg;
   url = app.get('html host') + "?token=" + token + "&uid=" + encodeURIComponent(uid);
   msg = {
-    from: "print.queue@mikeskalnik.com",
-    to: recipient,
-    subject: "Your Print Queue login token",
-    textBody: "Hello,\n\nSign in to Print Queue here: " + url
+    "From": "print.queue@mikeskalnik.com",
+    "To": recipient,
+    "Subject": "Your Print Queue Item Deletion URL",
+    "TextBody": "Hello,\n\n: To delete your Print Queue item click here: " + url
   };
   email.send(msg, function (err) {
     console.log("Failed to send message: ", msg);
