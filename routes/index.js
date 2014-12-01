@@ -39,10 +39,13 @@ router.post('/', function (req, res) {
       errors.push(errMsgs[i]);
     }
   }
+  if(errors.length > 0) {
+    req.flash('errors', errors);
+  }
   res.redirect('/');
 });
 
-router.post('/requestToken', passwordless.requestToken(function (itemId, delivery, callback, req) {
+router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
   QueueItem.find(req.redis, req.redisKey, req.param('itemId'), function (err, queueItem) {
     if (err) {
       callback(err, null);
