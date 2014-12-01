@@ -63,9 +63,13 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
     "TextBody": "Hello,\n\n: To delete your Print Queue item click here: " + url
   };
   email.send(msg, function (err) {
-    console.log("Failed to send message: ", msg);
-    console.log(err);
-    callback(err.message);
+    if (err) {
+      console.log("Failed to send message: ", msg);
+      console.log(err);
+      callback(err);
+    } else {
+      console.log("Successfully sent message: ", msg);
+    }
   });
 });
 app.use(passwordless.acceptToken());
