@@ -65,7 +65,7 @@ passwordless.addDelivery(function (token, uid, recipient, callback) {
   email.send(msg, function (err) {
     console.log("Failed to send message: ", msg);
     console.log(err);
-    callback(err);
+    callback(err.message);
   });
 });
 app.use(passwordless.acceptToken());
