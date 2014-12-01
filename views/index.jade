@@ -20,5 +20,8 @@ block content
       each item in queue
         li.queue
           a(href=item.url)= item.url
+        form.delete(action="/requestToken", method='post')
+          input(type='hidden', name='itemId', value=item.id)
+          input(type='submit', value='Delete item')
   else
     p.alert.queue Queue is empty

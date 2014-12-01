@@ -26,8 +26,8 @@
     "express-session": "~1.9.1",
     "passwordless": "~1.0.8",
     "passwordless-redisstore": "0.0.1",
-    "emailjs": "~0.3.12",
-    "connect-redis": "~2.1.0"
+    "connect-redis": "~2.1.0",
+    "postmark": "~0.2.6"
   },
   "devDependencies": {
     "jslint": "~0.6.6",

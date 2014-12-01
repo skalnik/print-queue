@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var QueueItem = require('../lib/queueItem.js');
+var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
   var locals = { queue: [], errors: req.flash('errors') };
@@ -38,6 +39,22 @@ router.post('/', function (req, res) {
       errors.push(errMsgs[i]);
     }
   }
+  res.redirect('/');
+});
+
+router.post('/requestToken', passwordless.requestToken(function (itemId, delivery, callback, req) {
+  QueueItem.find(req.redis, req.redisKey, itemId, function (err, queueItem) {
+    if (err) {
+      callback(err, null);
+    } else {
+      if (queueItem.queued) {
+        callback(new Error("Can't delete a queued item!"), null);
+      } else {
+        callback(null, queueItem.id);
+      }
+    }
+  });
+}, { userField: 'itemId' }), function (req, res) {
   res.redirect('/');
 });
 
