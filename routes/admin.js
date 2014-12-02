@@ -42,40 +42,24 @@ router.delete('/queue', function (req, res) {
 router.patch('/queue/:id', function (req, res) {
   var redis = req.redis,
     key = req.redisKey,
-    itemId = req.params.id;
-  QueueItem.find(redis, key, itemId, function (err, queueItem) {
+    itemId = req.params.id,
+    attrList = Object.keys(new QueueItem({})),
+    newAttrs = {},
+    i;
+
+  for (i = 0; i < attrList.length; i++) {
+    if (req.param(attrList[i])) {
+      newAttrs[attrList[i]] = req.param(attrList[i]);
+    }
+  }
+
+  QueueItem.update(redis, key, itemId, newAttrs, function (err) {
     if (err) {
       req.flash('errors', [err.message]);
-      res.redirect('/admin');
     } else {
-      var objKey,
-        updatedQueueItem = new QueueItem(JSON.parse(JSON.stringify(queueItem)));
-      for (objKey in updatedQueueItem) {
-        if (updatedQueueItem.hasOwnProperty(objKey) && // Does the object have this?
-            (req.param(objKey) !== null && req.param(objKey) !== undefined) && // Does it exist?
-            (updatedQueueItem[objKey] !== req.param(objKey))) { // Is it different?
-          updatedQueueItem[objKey] = req.param(objKey);
-        }
-      }
-
-      if (updatedQueueItem.valid) {
-        redis.multi()
-          .zrem(key, JSON.stringify(queueItem))
-          .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
-          .exec(function (err) {
-            if (err) {
-              req.flash('errors', [err.message]);
-            } else {
-              req.flash('message', 'Queue Item updated!');
-            }
-            res.redirect('/admin');
-          });
-      } else {
-        req.flash('errors', updatedQueueItem.errors);
-        res.redirect('/admin');
-      }
-
+      req.flash('message', 'Item updated!');
     }
+    res.redirect('/admin');
   });
 });
 
