@@ -18,7 +18,8 @@ router.get('/', function (req, res) {
   var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
   req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
     if (err) {
-      res.render('error', { error: err });
+      req.flash('errors', [err.message]);
+      res.render('admin');
     } else {
       locals.queue = queue.map(function (item) {
         return new QueueItem(JSON.parse(item));
