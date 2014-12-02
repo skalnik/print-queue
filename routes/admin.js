@@ -55,15 +55,13 @@ router.patch('/queue/:id', function (req, res) {
 });
 
 router.delete('/queue/:id', function (req, res) {
-  var redis = req.redis,
-    key = req.redisKey,
-    itemId = req.params.id;
+  var itemId = req.params.id;
   QueueItem.find(itemId, function (err, queueItem) {
     if (err) {
       req.flash('errors', [err.message]);
       res.redirect('/admin');
     } else {
-      redis.zrem(key, JSON.stringify(queueItem), function (err) {
+      queueItem.delete(function (err) {
         if (err) {
           req.flash('errors', [err.message]);
         } else {

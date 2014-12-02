@@ -52,16 +52,14 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
 });
 
 router.get('/deleteItem', passwordless.acceptToken(), function (req, res) {
-  var redis = req.redis,
-    key = req.redisKey,
-    itemId = req.itemId;
+  var itemId = req.itemId;
   if (itemId) {
     QueueItem.find(itemId, function (err, queueItem) {
       if (err) {
         req.flash('errors', [err.message]);
         res.redirect('/');
       } else {
-        redis.zrem(key, JSON.stringify(queueItem), function (err) {
+        queueItem.delete(function (err) {
           if (err) {
             req.flash('errors', [err.message]);
           } else {
