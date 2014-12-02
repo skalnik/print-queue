@@ -15,7 +15,7 @@ module.exports.router = express.Router();
 
 app.engine('handlebars', handlebars({
   defaultLayout: 'layout',
-  helpers: require('./lib/handlebarHelpers') 
+  helpers: require('./lib/handlebarHelpers')
 }));
 
 app.set('port', process.env.PORT || 3000);
