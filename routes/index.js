@@ -5,7 +5,7 @@ var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
   var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
-  QueueItem.all(req.redisKey, function (err, queue) {
+  QueueItem.all(function (err, queue) {
     if (err) {
       locals.errors.push(err.message);
     } else {
@@ -21,30 +21,21 @@ router.post('/', function (req, res) {
     errMsgs = queueItem.errors,
     i;
   if (queueItem && queueItem.valid) {
-    req.redis.incr(req.redisKey + ":id", function (err, id) {
-      if (err) {
-        errors.push("Could not save item: " + err);
-        res.redirect('/');
-      } else {
-        queueItem.id = id;
-        req.redis.zadd(req.redisKey, id, JSON.stringify(queueItem), function (err) {
-          if (err) { errors.push("Could not save item: " + err); }
-        });
-      }
+    queueItem.save(function (err) {
+      if (err) { req.flash('errors', [err.message]); }
+      res.redirect('/');
     });
   } else {
     for (i = 0; i < errMsgs.length; i++) {
       errors.push(errMsgs[i]);
     }
-  }
-  if (errors.length > 0) {
     req.flash('errors', errors);
+    res.redirect('/');
   }
-  res.redirect('/');
 });
 
 router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
-  QueueItem.find(req.redis, req.redisKey, req.param('itemId'), function (err, queueItem) {
+  QueueItem.find(req.param('itemId'), function (err, queueItem) {
     if (err) {
       callback(err, null);
     } else {
@@ -65,7 +56,7 @@ router.get('/deleteItem', passwordless.acceptToken(), function (req, res) {
     key = req.redisKey,
     itemId = req.itemId;
   if (itemId) {
-    QueueItem.find(redis, key, itemId, function (err, queueItem) {
+    QueueItem.find(itemId, function (err, queueItem) {
       if (err) {
         req.flash('errors', [err.message]);
         res.redirect('/');

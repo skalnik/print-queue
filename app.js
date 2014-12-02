@@ -40,7 +40,7 @@ require('./lib/passwordless')(app);
 // A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
   req.redis = redis;
-  req.redisKey = 'skalnik:print-queue';
+  req.redisKey = 'print-queue';
   req.password = process.env.PASSWORD || 'butts';
   next();
 });
