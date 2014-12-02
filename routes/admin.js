@@ -15,7 +15,12 @@ router.all('*', function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
+  var locals = {
+    queue            : [],
+    errors           : req.flash('errors'),
+    message          : req.flash('message')[0],
+    possibleStatuses : QueueItem.statuses
+  };
   req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
     if (err) {
       req.flash('errors', [err.message]);
