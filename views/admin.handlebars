@@ -6,7 +6,7 @@
   {{#each queue}}
     <li class="queue">
       {{id}}: {{url}} for {{email}} at {{timestamp}}
-      <form action="/admin/queue/#{item.id}?_method=PATCH" method='post'>
+      <form action="/admin/queue/{{id}}?_method=PATCH" method='post'>
         {{#if queued}}
           <input type="hidden" name="queued" value="" />
           <input type="submit" value="Unqueue item" />
@@ -15,7 +15,7 @@
           <input type="submit" value="Queue item" />
         {{/if}}
       </form>
-      <form action="/admin/queue/#{item.id}?_method=DELETE" method='post'>
+      <form action="/admin/queue/{{id}}?_method=DELETE" method='post'>
         <input type="submit" value="Delete item" />
       </form>
     </li>
