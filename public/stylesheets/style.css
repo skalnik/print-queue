@@ -122,12 +122,10 @@ table tr td {
 }
 
 table form.delete {
-  display: inline-block;
   margin: 0;
-  float: left;
 }
 
-table form.delete input[type=submit] {
+table form input[type=submit] {
   margin-top: -5px;
   height: 30px;
 }
