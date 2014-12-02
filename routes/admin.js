@@ -21,28 +21,19 @@ router.get('/', function (req, res) {
     message          : req.flash('message')[0],
     possibleStatuses : QueueItem.statuses
   };
-  req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
+
+  QueueItem.all(function (err, queue) {
     if (err) {
-      req.flash('errors', [err.message]);
-      res.render('admin');
+      locals.errors.push(err.message);
     } else {
-      locals.queue = queue.map(function (item) {
-        return new QueueItem(JSON.parse(item));
-      });
-      res.render('admin', locals);
+      locals.queue = queue;
     }
+    res.render('admin', locals);
   });
 });
 
-router.delete('/queue', function (req, res) {
-  req.redis.del(req.redisKey);
-  res.redirect('/admin');
-});
-
 router.patch('/queue/:id', function (req, res) {
-  var redis = req.redis,
-    key = req.redisKey,
-    itemId = req.params.id,
+  var itemId = req.params.id,
     attrList = Object.keys(new QueueItem({})),
     newAttrs = {},
     i;
@@ -53,7 +44,7 @@ router.patch('/queue/:id', function (req, res) {
     }
   }
 
-  QueueItem.update(redis, key, itemId, newAttrs, function (err) {
+  QueueItem.update(itemId, newAttrs, function (err) {
     if (err) {
       req.flash('errors', [err.message]);
     } else {
@@ -64,15 +55,13 @@ router.patch('/queue/:id', function (req, res) {
 });
 
 router.delete('/queue/:id', function (req, res) {
-  var redis = req.redis,
-    key = req.redisKey,
-    itemId = req.params.id;
-  QueueItem.find(redis, key, itemId, function (err, queueItem) {
+  var itemId = req.params.id;
+  QueueItem.find(itemId, function (err, queueItem) {
     if (err) {
       req.flash('errors', [err.message]);
       res.redirect('/admin');
     } else {
-      redis.zrem(key, JSON.stringify(queueItem), function (err) {
+      queueItem.delete(function (err) {
         if (err) {
           req.flash('errors', [err.message]);
         } else {

@@ -6,46 +6,17 @@ var express          = require('express'),
   flash              = require('connect-flash'),
   session            = require('express-session'),
   handlebars         = require('express-handlebars'),
-  passwordless       = require('passwordless'),
-  email              = require('postmark')(process.env.POSTMARK_API_KEY),
-  redis              = require('redis'),
-  RedisSessionStore  = require('connect-redis')(session),
-  RedisPasswordStore = require('passwordless-redisstore');
+  RedisSessionStore  = require('connect-redis')(session);
 
-// Setup redis for session store, general DB usage, and passwordless storage
-var redisURL = process.env.BOXEN_REDIS_URL || process.env.REDISCLOUD_URL || process.env.REDIS_URL,
-  db,
-  passwordlessStore;
+var redis = require('./lib/redis');
 
-if (redisURL) {
-  var url = require('url').parse(redisURL),
-    options = {};
-
-  if (url.auth) {
-    options = { auth_pass: url.auth.split(":")[1] };
-  }
-
-  db = redis.createClient(url.port, url.hostname, options);
-  passwordlessStore = new RedisPasswordStore(url.port, url.hostname, options);
-} else {
-  db = redis.createClient();
-  passwordlessStore = new RedisPasswordStore();
-}
-
-var handlebarHelpers = {
-  equal: function (a, b, options) {
-    if (a === b) {
-      return options.fn(this);
-    }
-    return options.inverse(this);
-  }
-};
-
-// Setup express
 var app = express();
 module.exports.router = express.Router();
 
-app.engine('handlebars', handlebars({ defaultLayout: 'layout', helpers: handlebarHelpers }));
+app.engine('handlebars', handlebars({
+  defaultLayout: 'layout',
+  helpers: require('./lib/handlebarHelpers')
+}));
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -58,38 +29,18 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
 app.use(session({
-  store:             new RedisSessionStore({ client: db }),
+  store:             new RedisSessionStore({ client: redis }),
   saveUninitialized: false,
   resave:            false,
   secret:            process.env.SESSION_SECRET || 'giro is a cat'
 }));
 
-// Setup passwordless
-passwordless.init(passwordlessStore, { userProperty: 'itemId' });
-passwordless.addDelivery(function (token, uid, recipient, callback) {
-  var url, msg;
-  url = app.get('host') + "/deleteItem/?token=" + token + "&uid=" + encodeURIComponent(uid);
-  msg = {
-    "From": "print.queue@mikeskalnik.com",
-    "To": recipient,
-    "Subject": "Your Print Queue Item Deletion URL",
-    "TextBody": "Hello,\n\nTo delete your Print Queue item click here: " + url
-  };
-  email.send(msg, function (err) {
-    if (err) {
-      console.log("Failed to send message: ", msg);
-      console.log(err);
-    } else {
-      console.log("Successfully sent message: ", msg);
-    }
-    callback();
-  });
-});
+require('./lib/passwordless')(app);
 
 // A small middleware to give all the routes access to DB & admin password
 app.use(function (req, res, next) {
-  req.redis = db;
-  req.redisKey = 'skalnik:print-queue';
+  req.redis = redis;
+  req.redisKey = 'print-queue';
   req.password = process.env.PASSWORD || 'butts';
   next();
 });
