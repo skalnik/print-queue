@@ -7,6 +7,19 @@
   </head>
   <body>
     <div class="container">
+      <h1>Print Queue</h1>
+
+      {{#if message}}
+        <p class="alert msg">{{message}}</p>
+      {{/if}}
+      {{#if errors}}
+        {{#each errors}}
+          <p class="alert msg">
+            {{this}}
+          </p>
+        {{/each}}
+      {{/if}}
+
       {{{body}}}
     </div>
   </body>
