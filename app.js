@@ -5,6 +5,7 @@ var express          = require('express'),
   methodOverride     = require('method-override'),
   flash              = require('connect-flash'),
   session            = require('express-session'),
+  handlebars         = require('express-handlebars'),
   passwordless       = require('passwordless'),
   email              = require('postmark')(process.env.POSTMARK_API_KEY),
   redis              = require('redis'),
@@ -35,9 +36,11 @@ if (redisURL) {
 var app = express();
 module.exports.router = express.Router();
 
+app.engine('handlebars', handlebars({ defaultLayout: 'layout' }));
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'handlebars');
 app.set('host', process.env.HOST || "http://localhost:" + app.get('port'));
 
 app.use(logger('dev'));
