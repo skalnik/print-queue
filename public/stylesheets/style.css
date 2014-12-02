@@ -119,6 +119,21 @@ table tr td {
   border-top: 1px solid #333;
   padding: 8px;
   line-height: 1.5;
+  vertical-align: center;
+}
+
+table tr td form {
+  width: 175px;
+  margin: 0px;
+  padding: 8px;
+}
+
+table tr td form select {
+  float: left;
+}
+
+table tr td form input {
+  float: right;
 }
 
 table form.delete {
