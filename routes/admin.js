@@ -58,7 +58,7 @@ router.patch('/queue/:id', function (req, res) {
         }
       }
 
-      if(updatedQueueItem.valid) {
+      if (updatedQueueItem.valid) {
         redis.multi()
           .zrem(key, JSON.stringify(queueItem))
           .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))

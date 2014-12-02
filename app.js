@@ -39,7 +39,7 @@ var handlebarHelpers = {
     }
     return options.inverse(this);
   }
-}
+};
 
 // Setup express
 var app = express();
