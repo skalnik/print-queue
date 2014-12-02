@@ -6,27 +6,17 @@ var express          = require('express'),
   flash              = require('connect-flash'),
   session            = require('express-session'),
   handlebars         = require('express-handlebars'),
-  passwordless       = require('passwordless'),
-  RedisSessionStore  = require('connect-redis')(session),
-  RedisPasswordStore = require('passwordless-redisstore');
-
+  RedisSessionStore  = require('connect-redis')(session);
 
 var redis = require('./lib/redis');
 
-var handlebarHelpers = {
-  equal: function (a, b, options) {
-    if (a === b) {
-      return options.fn(this);
-    }
-    return options.inverse(this);
-  }
-};
-
-// Setup express
 var app = express();
 module.exports.router = express.Router();
 
-app.engine('handlebars', handlebars({ defaultLayout: 'layout', helpers: handlebarHelpers }));
+app.engine('handlebars', handlebars({
+  defaultLayout: 'layout',
+  helpers: require('./lib/handlebarHelpers') 
+}));
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
