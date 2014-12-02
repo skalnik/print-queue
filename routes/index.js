@@ -5,15 +5,13 @@ var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
   var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
-  req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
+  QueueItem.all(req.redisKey, function (err, queue) {
     if (err) {
-      res.render('error', { error: err });
+      locals.errors.push(err.message);
     } else {
-      locals.queue = queue.map(function (item) {
-        return new QueueItem(JSON.parse(item));
-      });
-      res.render('index', locals);
+      locals.queue = queue;
     }
+    res.render('index', locals);
   });
 });
 
