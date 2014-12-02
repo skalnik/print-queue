@@ -102,39 +102,30 @@ h2 {
   margin: 50px 0 15px 0;
 }
 
-ul {
-  font-size: 14px;
-  padding: 10px;
-  margin: 5px 0 5px 0;
-  list-style-type: none;
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
-ul li {
-  font-weight: 700;
-  text-align: center;
-  padding: 10px;
-  margin: 7px 0 5px 0;
-  line-height: 20px;
-  border-radius: 4px;
+table tr th {
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+  padding: 8px;
+  line-height: 1.5;
 }
 
-ul li a {
-  color: #fff;
-  text-decoration: none;
+table tr td {
+  border-top: 1px solid #333;
+  padding: 8px;
+  line-height: 1.5;
 }
 
-ul li a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
-li form.delete {
-  display: inline-block;
+table form.delete {
   margin: 0;
-  float: left;
 }
 
-li form.delete input[type=submit] {
+table form input[type=submit] {
   margin-top: -5px;
   height: 30px;
 }

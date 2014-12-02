@@ -2,22 +2,42 @@
   <input type="submit" value="Clear Queue" />
 </form>
 
-<ul>
-  {{#each queue}}
-    <li class="queue">
-      {{id}}: {{url}} for {{email}} at {{timestamp}}
-      <form action="/admin/queue/{{id}}?_method=PATCH" method='post'>
-        {{#if queued}}
-          <input type="hidden" name="queued" value="" />
-          <input type="submit" value="Unqueue item" />
-        {{else}}
-          <input type="hidden" name="queued" value="true" />
-          <input type="submit" value="Queue item" />
-        {{/if}}
-      </form>
-      <form action="/admin/queue/{{id}}?_method=DELETE" method='post'>
-        <input type="submit" value="Delete item" />
-      </form>
-    </li>
-  {{/each}}
-</ul>
+
+{{#if queue}}
+  <table>
+    <thead>
+      <tr>
+        <th>When</th>
+        <th>Email</th>
+        <th>URL</th>
+        <th>Status</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each queue}}
+        <tr>
+          <form action="/admin/queue/{{id}}/?_method=PATCH" method="post">
+            <td>{{timestamp}}</td>
+            <td>{{email}}</td>
+            <td>{{url}}</td>
+            <td>
+              <select name="status">
+                {{#each ../possibleStatuses}}
+                  {{#equal ../status this}}
+                    <option value="{{this}}" selected >{{this}}</option>
+                  {{else}}
+                    <option value="{{this}}">{{this}}</option>
+                  {{/equal}}
+                {{/each}}
+              </select>
+            </td>
+            <td><input type="submit" value="Update" /></td>
+          </form>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  Queue empty!
+{{/if}}

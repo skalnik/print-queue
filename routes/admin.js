@@ -15,7 +15,12 @@ router.all('*', function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
+  var locals = {
+    queue            : [],
+    errors           : req.flash('errors'),
+    message          : req.flash('message')[0],
+    possibleStatuses : QueueItem.statuses
+  };
   req.redis.zrange(req.redisKey, 0, -1, function (err, queue) {
     if (err) {
       req.flash('errors', [err.message]);
@@ -53,17 +58,23 @@ router.patch('/queue/:id', function (req, res) {
         }
       }
 
-      redis.multi()
-        .zrem(key, JSON.stringify(queueItem))
-        .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
-        .exec(function (err) {
-          if (err) {
-            req.flash('errors', [err.message]);
-          } else {
-            req.flash('message', 'Queue Item updated!');
-          }
-          res.redirect('/admin');
-        });
+      if (updatedQueueItem.valid) {
+        redis.multi()
+          .zrem(key, JSON.stringify(queueItem))
+          .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
+          .exec(function (err) {
+            if (err) {
+              req.flash('errors', [err.message]);
+            } else {
+              req.flash('message', 'Queue Item updated!');
+            }
+            res.redirect('/admin');
+          });
+      } else {
+        req.flash('errors', updatedQueueItem.errors);
+        res.redirect('/admin');
+      }
+
     }
   });
 });

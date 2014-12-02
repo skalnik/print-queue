@@ -32,11 +32,20 @@ if (redisURL) {
   passwordlessStore = new RedisPasswordStore();
 }
 
+var handlebarHelpers = {
+  equal: function (a, b, options) {
+    if (a === b) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  }
+};
+
 // Setup express
 var app = express();
 module.exports.router = express.Router();
 
-app.engine('handlebars', handlebars({ defaultLayout: 'layout' }));
+app.engine('handlebars', handlebars({ defaultLayout: 'layout', helpers: handlebarHelpers }));
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
