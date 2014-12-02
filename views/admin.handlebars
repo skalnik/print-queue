@@ -2,22 +2,22 @@
   <input type="submit" value="Clear Queue" />
 </form>
 
-<ul>
+
+<table>
+  <tr>
+    <th>When</th>
+    <th>Email</th>
+    <th>URL</th>
+    <th>Status</th>
+    <th>Update</th>
+  </tr>
   {{#each queue}}
-    <li class="queue">
-      {{id}}: {{url}} for {{email}} at {{timestamp}}
-      <form action="/admin/queue/{{id}}?_method=PATCH" method='post'>
-        {{#if queued}}
-          <input type="hidden" name="queued" value="" />
-          <input type="submit" value="Unqueue item" />
-        {{else}}
-          <input type="hidden" name="queued" value="true" />
-          <input type="submit" value="Queue item" />
-        {{/if}}
-      </form>
-      <form action="/admin/queue/{{id}}?_method=DELETE" method='post'>
-        <input type="submit" value="Delete item" />
-      </form>
-    </li>
+    <tr>
+      <td>{{timestamp}}</td>
+      <td>{{email}}</td>
+      <td>{{url}}</td>
+      <td>{{status}}</td>
+      <td><input type="submit" value="Update" /></td>
+    </tr>
   {{/each}}
-</ul>
+</table>
