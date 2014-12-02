@@ -1,51 +1,8 @@
+@import 'bootstrap.css';
 @import 'tipsy.css';
 
-body {
-  padding: 14px 25px 0 25px;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  background: #282828;
-  color: #ebebeb;
-}
-
-div.container {
-  margin: 0 auto;
-  width: 600px;
-}
-
-h1 {
-  font-size: 50px;
+h1, h2 {
   text-align: center;
-  margin: 30px auto;
-}
-
-p {
-  font-size: 14px;
-  padding: 10px;
-  margin: 5px 0 5px 0;
-}
-
-p.alert {
-  font-weight: 700;
-  text-align: center;
-  padding: 10px;
-  margin: 7px 0 5px 0;
-  line-height: 20px;
-  border-radius: 4px;
-}
-
-p.error {
-  color: #555;
-  background-color: rgb(242, 222, 222);
-}
-
-p.msg {
-  color: #555;
-  background-color: #dff0d8;
-}
-
-.queue {
-  color: #fff;
-  background-color: #428bca;
 }
 
 form {

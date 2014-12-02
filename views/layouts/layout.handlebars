@@ -10,13 +10,15 @@
       <h1>Print Queue</h1>
 
       {{#if message}}
-        <p class="alert msg">{{message}}</p>
+        <div class="alert alert-info">
+          {{message}}
+        </div>
       {{/if}}
       {{#if errors}}
         {{#each errors}}
-          <p class="alert msg">
+          <div class="alert alert-danger">
             {{this}}
-          </p>
+          </div>
         {{/each}}
       {{/if}}
 
