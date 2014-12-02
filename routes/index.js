@@ -20,9 +20,9 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
   var errors = [],
     queueItem = new QueueItem(req.body.queue),
-    errMsgs = queueItem.errors(),
+    errMsgs = queueItem.errors,
     i;
-  if (queueItem && queueItem.valid()) {
+  if (queueItem && queueItem.valid) {
     req.redis.incr(req.redisKey + ":id", function (err, id) {
       if (err) {
         errors.push("Could not save item: " + err);

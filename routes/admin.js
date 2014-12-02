@@ -53,17 +53,23 @@ router.patch('/queue/:id', function (req, res) {
         }
       }
 
-      redis.multi()
-        .zrem(key, JSON.stringify(queueItem))
-        .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
-        .exec(function (err) {
-          if (err) {
-            req.flash('errors', [err.message]);
-          } else {
-            req.flash('message', 'Queue Item updated!');
-          }
-          res.redirect('/admin');
-        });
+      if(updatedQueueItem.valid) {
+        redis.multi()
+          .zrem(key, JSON.stringify(queueItem))
+          .zadd(key, updatedQueueItem.id, JSON.stringify(updatedQueueItem))
+          .exec(function (err) {
+            if (err) {
+              req.flash('errors', [err.message]);
+            } else {
+              req.flash('message', 'Queue Item updated!');
+            }
+            res.redirect('/admin');
+          });
+      } else {
+        req.flash('errors', updatedQueueItem.errors);
+        res.redirect('/admin');
+      }
+
     }
   });
 });
