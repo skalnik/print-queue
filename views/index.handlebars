@@ -1,0 +1,50 @@
+<h1>Print Queue</h1>
+
+{{#if message}}
+  <p class="alert msg">{{message}}</p>
+{{/if}}
+{{#if errors}}
+  <p class="alert msg">
+    {{#each errors}}
+      msg
+    {{/each}}
+  </p>
+{{/if}}
+
+<form action="/" method="post">
+  <div class="form-group">
+    <label for="queue[url]">STL URL</label>
+    <input type="text"
+           name="queue[url]"
+           placeholder="http://thingiverse.com/download:1234" />
+  </div>
+  <div class="form-group">
+    <label for="queue[email]">Email address</label>
+    <input type="text"
+           name="queue[email]"
+           placeholder="example@example.com" />
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Add to queue" />
+  </div>
+</form>
+
+<h2>Current Queue</h2>
+{{#if queue}}
+  <ul>
+    {{#each queue}}
+      <li class='queue'>
+        <a href="{{url}}">{{url}}</a>
+        {{#unless queued}}
+          <form class="delete" action="/requestToken" method="post">
+            <input type="hidden" name="itemId" value="{{id}}" />
+            <input type="hidden" name="user" value="#{{email}}" />
+            <input class="delete"
+                   type="submit"
+                   value="Delete"
+                   title="This requires access to the email this was queued with" />
+        {{/unless}}
+      </li>
+    {{/each}}
+  </ul>
+{{/if}}
