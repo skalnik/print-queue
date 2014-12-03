@@ -49,11 +49,8 @@
 {{/if}}
 
 <script>
-  {{#if queue}}
-    var jobData = {{{queue}}};
-  {{else}}
-    var jobData = {};
-  {{/if}}
+  var jobData = {};
+  {{#if queue}} jobData = {{{json queue}}}; {{/if}}
 </script>
 
 <script type="text/javascript" src="/javascripts/admin.js"></script>
