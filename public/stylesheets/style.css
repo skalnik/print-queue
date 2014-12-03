@@ -75,3 +75,35 @@ table form input[type=submit] {
   margin-top: -5px;
   height: 30px;
 }
+
+table select {
+  width: 95px;
+}
+
+table form .btn-danger {
+  color: #fff;
+}
+
+table form .btn-danger:hover {
+  background-color: #d43f3a;
+}
+
+table form .updatebtn {
+  padding-left: 5px;
+}
+
+table select.printed {
+  background-color: #dff0d8;
+}
+
+table select.queued {
+  background-color: #d9edf7;
+}
+
+table select.submitted {
+  background-color: #fffffe;
+}
+
+table select.rejected {
+  background-color: #f2dede;
+}

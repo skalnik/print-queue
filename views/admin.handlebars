@@ -17,7 +17,7 @@
           <td>{{url}}</td>
           <td class="update">
             <form action="/admin/queue/{{id}}/?_method=PATCH" method="post">
-            <select name="status">
+            <select name="status" class="{{status}}">
               {{#each ../possibleStatuses}}
                 {{#equal ../status this}}
                   <option value="{{this}}" selected >{{this}}</option>
@@ -26,7 +26,7 @@
                 {{/equal}}
               {{/each}}
             </select>
-            <input type="submit" value="Update" />
+            <input class="btn btn-default btn-xs" type="submit" value="Update" />
             </form>
           </td>
           <td>
