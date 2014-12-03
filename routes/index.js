@@ -4,7 +4,14 @@ var QueueItem = require('../lib/queueItem.js');
 var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
-  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
+  var locals = {
+    queue: [],
+    errors: req.flash('errors'),
+    message: req.flash('message')[0],
+    queueItem: req.flash('queueItem')[0],
+    email: req.user,
+  };
+
   QueueItem.all(function (err, queue) {
     if (err) {
       locals.errors.push(err.message);
@@ -34,45 +41,70 @@ router.post('/', function (req, res) {
   }
 });
 
-router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
-  QueueItem.find(req.param('itemId'), function (err, queueItem) {
+router.get('/queue/:itemId', passwordless.restricted(), function (req, res) {
+  QueueItem.find(req.params.itemId, function (err, queueItem) {
     if (err) {
-      callback(err, null);
+      req.flash('errors', [err.message]);
+      res.redirect('/');
     } else {
-      if (queueItem.queued) {
-        callback(new Error("Can't delete a queued item!"), null);
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
       } else {
-        callback(null, queueItem.id);
+        req.flash('queueItem', queueItem);
+        res.redirect('/');
       }
     }
-  });
-}), function (req, res) {
-  req.flash('message', 'Check your email for deletion instructions');
-  res.redirect('/');
+  })
 });
 
-router.get('/deleteItem', passwordless.acceptToken(), function (req, res) {
-  var itemId = req.itemId;
-  if (itemId) {
-    QueueItem.find(itemId, function (err, queueItem) {
-      if (err) {
-        req.flash('errors', [err.message]);
-        res.redirect('/');
+router.patch('/queue/:id', function (req, res) {
+  var itemId = req.params.id,
+    newAttrs = req.body.queue,
+    i;
+
+  QueueItem.find(itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/');
+    } else {
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
       } else {
-        queueItem.delete(function (err) {
+        QueueItem.update(itemId, newAttrs, function (err) {
           if (err) {
             req.flash('errors', [err.message]);
           } else {
-            req.flash('message', 'Item deleted!');
+            req.flash('message', 'Item updated!');
           }
           res.redirect('/');
         });
       }
-    });
-  } else {
-    req.flash('errors', ['Could not authenticate successfully']);
-    res.redirect('/');
-  }
+    }
+  });
+});
+
+router.delete('/queue/:itemId', passwordless.restricted(), function (req, res) {
+  QueueItem.find(req.params.itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/');
+    } else {
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
+      }
+      queueItem.delete(function (err) {
+        if (err) {
+          req.flash('errors', [err.message]);
+        } else {
+          req.flash('message', 'Item deleted!');
+        }
+        res.redirect('/');
+      });
+    }
+  });
 });
 
 module.exports = router;
