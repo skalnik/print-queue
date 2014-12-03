@@ -12,7 +12,7 @@
         <tr data-bind="attr: { 'class': status }">
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td data-bind="text: email"></td>
-          <td data-bind="text: url"></td>
+          <td><a href="#" data-bind="text: url, attr: { 'href': url }"></a></td>
           <td class="update">
             <form class="form-inline"
                   role="form"
