@@ -55,14 +55,11 @@
             <td>
               {{#equal ../../email email}}
                 {{#unless queued}}
-                  <form class="form-inline" role="form" action="/requestToken" method="post">
-                    <input type="hidden" name="itemId" value="{{id}}" />
-                    <input type="hidden" name="user" value="{{email}}" />
-                    <button type="submit"
-                           class="btn btn-danger btn-xs"
-                           title="This requires access to the email this was queued with">
-                      &times;
-                    </button>
+                  <form class="form-inline"
+                        role="form"
+                        action="/queue/{{id}}?_method=DELETE"
+                        method="post">
+                    <button type="submit" class="btn btn-danger btn-xs">&times;</button>
                   </form>
                 {{/unless}}
               {{/equal }}

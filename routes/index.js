@@ -57,28 +57,22 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
   res.redirect('/');
 });
 
-router.get('/deleteItem', passwordless.acceptToken(), function (req, res) {
-  var itemId = req.itemId;
-  if (itemId) {
-    QueueItem.find(itemId, function (err, queueItem) {
-      if (err) {
-        req.flash('errors', [err.message]);
+router.delete('/queue/:itemId', function (req, res) {
+  QueueItem.find(itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/');
+    } else {
+      queueItem.delete(function (err) {
+        if (err) {
+          req.flash('errors', [err.message]);
+        } else {
+          req.flash('message', 'Item deleted!');
+        }
         res.redirect('/');
-      } else {
-        queueItem.delete(function (err) {
-          if (err) {
-            req.flash('errors', [err.message]);
-          } else {
-            req.flash('message', 'Item deleted!');
-          }
-          res.redirect('/');
-        });
-      }
-    });
-  } else {
-    req.flash('errors', ['Could not authenticate successfully']);
-    res.redirect('/');
-  }
+      });
+    }
+  });
 });
 
 module.exports = router;
