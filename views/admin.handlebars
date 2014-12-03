@@ -1,5 +1,5 @@
 {{#if queue}}
-  <table class="table table-hover">
+  <table class="table table-hover admin">
     <thead>
       <tr>
         <th>When</th>
@@ -16,25 +16,28 @@
           <td>{{email}}</td>
           <td>{{url}}</td>
           <td class="update">
-            <form action="/admin/queue/{{id}}/?_method=PATCH" method="post">
-            <select name="status" class="{{status}}">
-              {{#each ../possibleStatuses}}
-                {{#equal ../status this}}
-                  <option value="{{this}}" selected >{{this}}</option>
-                {{else}}
-                  <option value="{{this}}">{{this}}</option>
-                {{/equal}}
-              {{/each}}
-            </select>
-            <input class="btn btn-default btn-xs" type="submit" value="Update" />
+            <form class="form-inline"
+                  role="form"
+                  action="/admin/queue/{{id}}/?_method=PATCH"
+                  method="post">
+              <select class="form-control input-sm" name="status">
+                {{#each ../possibleStatuses}}
+                  {{#equal ../status this}}
+                    <option value="{{this}}" selected >{{this}}</option>
+                  {{else}}
+                    <option value="{{this}}">{{this}}</option>
+                  {{/equal}}
+                {{/each}}
+              </select>
+              <button type="submit" class="btn btn-default btn-xs">Update</button>
             </form>
           </td>
           <td>
             {{#if notified}}
               Yes
             {{else}}
-              <form action="/admin/notify/{{id}}" method="post">
-                <input type="submit" value="Notify" />
+              <form class="form-inline" role="form" action="/admin/notify/{{id}}" method="post">
+                <button type="submit" class="btn btn-default btn-xs">Notify</button>
               </form>
             {{/if}}
         </tr>
