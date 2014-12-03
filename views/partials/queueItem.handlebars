@@ -1,0 +1,47 @@
+{{#if id}}
+<form action="/queue/{{id}}?_method=PATCH" method="post" class="form-horizontal" role="form">
+{{else}}
+<form action="/" method="post" class="form-horizontal" role="form">
+{{/if}}
+  <div class="form-group">
+    <label for="queue[url]" class="col-sm-3 control-label">STL URL</label>
+    <div class="col-sm-8">
+      <input  type="text"
+              name="queue[url]"
+              class="form-control"
+              {{#if url}}
+                value="{{url}}"
+              {{else}}
+                placeholder="http://thingiverse.com/download:1234"
+              {{/if}}
+              />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="queue[email]" class="col-sm-3 control-label">Email address</label>
+    <div class="col-sm-8">
+      <input  type="text"
+              name="queue[email]"
+              class="form-control"
+              {{#if email}}
+                value="{{email}}"
+              {{else}}
+                placeholder="example@example.com"
+              {{/if}}
+              />
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-2">
+      <input  class="btn btn-primary"
+              type="submit"
+              {{#if id}}
+                value="Update"
+              {{else}}
+                value="Add Item"
+              {{/if}}
+              />
+      </form>
+    </div>
+  </div>
+</form>

@@ -40,12 +40,59 @@ router.post('/', function (req, res) {
   }
 });
 
-router.delete('/queue/:itemId', function (req, res) {
+router.get('/queue/:itemId', passwordless.restricted(), function (req, res) {
   QueueItem.find(req.params.itemId, function (err, queueItem) {
     if (err) {
       req.flash('errors', [err.message]);
       res.redirect('/');
     } else {
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
+      } else {
+        res.render('edit', { queueItem: queueItem });
+      }
+    }
+  })
+});
+
+router.patch('/queue/:id', function (req, res) {
+  var itemId = req.params.id,
+    newAttrs = req.body.queue,
+    i;
+
+  QueueItem.find(itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/');
+    } else {
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
+      } else {
+        QueueItem.update(itemId, newAttrs, function (err) {
+          if (err) {
+            req.flash('errors', [err.message]);
+          } else {
+            req.flash('message', 'Item updated!');
+          }
+          res.redirect('/');
+        });
+      }
+    }
+  });
+});
+
+router.delete('/queue/:itemId', passwordless.restricted(), function (req, res) {
+  QueueItem.find(req.params.itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/');
+    } else {
+      if (queueItem.email !== req.user) {
+        req.flash('errors', ['Not authorized to do that!']);
+        res.redirect('/login');
+      }
       queueItem.delete(function (err) {
         if (err) {
           req.flash('errors', [err.message]);
