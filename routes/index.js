@@ -40,23 +40,6 @@ router.post('/', function (req, res) {
   }
 });
 
-router.get('/login', function (req, res) {
-  res.render('login');
-});
-
-router.get('/logout', passwordless.logout(), function (req, res) {
-  req.flash('message', 'Logged out');
-  res.redirect('/');
-});
-
-// Allow any email address to log in
-router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
-    callback(null, email);
-  }), function (req, res) {
-  req.flash('message', 'Check your email for sign in instructions');
-  res.redirect('/');
-});
-
 router.delete('/queue/:itemId', function (req, res) {
   QueueItem.find(req.params.itemId, function (err, queueItem) {
     if (err) {
