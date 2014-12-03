@@ -20,7 +20,7 @@
                   role="form"
                   action="/admin/queue/{{id}}/?_method=PATCH"
                   method="post">
-              <select class="form-control input-sm" name="status">
+              <select class="form-control input-sm {{status}}" name="status">
                 {{#each ../possibleStatuses}}
                   {{#equal ../status this}}
                     <option value="{{this}}" selected >{{this}}</option>
