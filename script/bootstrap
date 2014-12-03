@@ -5,5 +5,6 @@ if [ "$NODE_ENV" = 'development' ]; then
 else
   npm install --production
   echo "Compiling assets"
-  browserify client/*.js -o public/javascripts/main.js
+  browserify client/index.js -o public/javascripts/index.js
+  browserify client/admin.js -o public/javascripts/admin.js
 fi

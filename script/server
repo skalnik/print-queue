@@ -8,7 +8,7 @@ script/bootstrap
 
 if [ "$NODE_ENV" = 'development' ]; then
   echo "Running Print Queue in Development"
-  watchify client/*.js -o public/javascripts/main.js -v & nodemon -e js,handlebars app.js
+  watchify client/index.js -o public/javascripts/index.js -v & watchify client/admin.js -o public/javascripts/admin.js -v & nodemon -e js,handlebars app.js
 else
   node app.js
 fi
