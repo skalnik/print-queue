@@ -58,7 +58,7 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
 });
 
 router.delete('/queue/:itemId', function (req, res) {
-  QueueItem.find(itemId, function (err, queueItem) {
+  QueueItem.find(req.params.itemId, function (err, queueItem) {
     if (err) {
       req.flash('errors', [err.message]);
       res.redirect('/');
