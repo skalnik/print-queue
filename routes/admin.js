@@ -8,8 +8,8 @@ var ADMINS = ['mike.skalnik@gmail.com']
 
 router.all('*', passwordless.restricted(), function (req, res, next) {
   if (ADMINS.indexOf(req.user) === -1) {
-    req.flash('errors', ['Not authorized!']);
-    res.redirect('/login');
+    req.flash('errors', 'Not authorized!');
+    res.redirect('/');
   } else {
     next();
   }
