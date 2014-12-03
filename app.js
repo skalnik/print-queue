@@ -41,7 +41,7 @@ require('./lib/passwordless')(app);
 app.use(function (req, res, next) {
   req.redis = redis;
   req.redisKey = 'print-queue';
-  req.password = process.env.PASSWORD || 'butts';
+  req.password = process.env.PASSWORD || '3d printing';
   next();
 });
 
