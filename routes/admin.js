@@ -1,15 +1,15 @@
 var express = require('express'),
   email = require('postmark')(process.env.POSTMARK_API_KEY),
-  auth = require('basic-auth'),
+  passwordless = require('passwordless'),
   router = express.Router(),
   QueueItem = require('../lib/queueItem.js');
 
-router.all('*', function (req, res, next) {
-  var user = auth(req);
-  if (user === undefined || user.pass !== req.password) {
-    res.statusCode = 401;
-    res.setHeader('WWW-Authenticate', 'Basic realm="Print Queue"');
-    res.end('Unauthorized');
+var ADMINS = ['mike.skalnik@gmail.com']
+
+router.all('*', passwordless.restricted(), function (req, res, next) {
+  if (ADMINS.indexOf(req.user) === -1) {
+    req.flash('errors', ['Not authorized!']);
+    res.redirect('/login');
   } else {
     next();
   }
