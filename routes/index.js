@@ -39,9 +39,14 @@ router.post('/', function (req, res) {
   }
 });
 
-router.get('/login', function(req, res) {
-  res.render('login', {});
-})
+router.get('/login', function (req, res) {
+  res.render('login');
+});
+
+router.get('/logout', passwordless.logout(), function (req, res) {
+  req.flash('message', 'Logged out');
+  res.redirect('/');
+});
 
 // Allow any email address to log in
 router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
