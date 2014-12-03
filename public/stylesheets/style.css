@@ -21,8 +21,6 @@ table.admin tbody td {
   vertical-align: middle;
 }
 
-
-
 table form .btn-danger {
   color: #fff;
 }
@@ -63,4 +61,8 @@ table select.pending {
 
 table select.rejected {
   background-color: #f2dede;
+}
+
+.toggles {
+  text-align: right;
 }

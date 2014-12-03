@@ -4,6 +4,8 @@ var io = require('./common/socket.io-1.2.1');
 var ko = require('knockout');
 require('./common/knockout.bindings.orderable');
 
+var $ = jQuery; 
+
 // set up socket.io
 var listen = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
 var socket = io.connect(listen);
