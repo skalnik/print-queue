@@ -4,7 +4,12 @@ var QueueItem = require('../lib/queueItem.js');
 var passwordless = require('passwordless');
 
 router.get('/', function (req, res) {
-  var locals = { queue: [], errors: req.flash('errors'), message: req.flash('message')[0] };
+  var locals = {
+    queue: [],
+    errors: req.flash('errors'),
+    message: req.flash('message')[0],
+    email: req.user
+  };
   QueueItem.all(function (err, queue) {
     if (err) {
       locals.errors.push(err.message);
