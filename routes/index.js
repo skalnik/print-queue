@@ -10,6 +10,7 @@ router.get('/', function (req, res) {
     message: req.flash('message')[0],
     email: req.user
   };
+
   QueueItem.all(function (err, queue) {
     if (err) {
       locals.errors.push(err.message);
