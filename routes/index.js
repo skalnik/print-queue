@@ -38,19 +38,10 @@ router.get('/login', function(req, res) {
   res.render('login', {});
 })
 
+// Allow any email address to log in
 router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
-  QueueItem.find(req.param('itemId'), function (err, queueItem) {
-    if (err) {
-      callback(err, null);
-    } else {
-      if (queueItem.queued) {
-        callback(new Error("Can't delete a queued item!"), null);
-      } else {
-        callback(null, queueItem.id);
-      }
-    }
-  });
-}), function (req, res) {
+    callback(null, email);
+  }), function (req, res) {
   req.flash('message', 'Check your email for deletion instructions');
   res.redirect('/');
 });
