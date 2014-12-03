@@ -1,3 +1,11 @@
+<div class="user-well">
+  {{#if email}}
+    <a href="/logout" alt="Sign out">Sign out</a>
+  {{ else }}
+    <a href="/login" alt="Sign In">Sign In</a>
+  {{/if}}
+</div>
+
 <form action="/" method="post" class="form-horizontal" role="form">
   <div class="form-group">
     <label for="queue[url][]" class="col-sm-3 control-label">STL URL</label>
