@@ -6,6 +6,7 @@
         <th>Email</th>
         <th>URL</th>
         <th>Status</th>
+        <th>Notified?</th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,14 @@
             <input type="submit" value="Update" />
             </form>
           </td>
+          <td>
+            {{#if notified}}
+              Yes
+            {{else}}
+              <form action="/admin/notify/{{id}}" method="post">
+                <input type="submit" value="Notify" />
+              </form>
+            {{/if}}
         </tr>
       {{/each}}
     </tbody>
