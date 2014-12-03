@@ -42,6 +42,7 @@
         <th>Status</th>
         {{#if ../email}}
           <th></th>
+          <th></th>
         {{/if}}
       </tr>
     </thead>
@@ -52,6 +53,13 @@
           <td>{{url}}</td>
           <td>{{status}} </td>
           {{#if ../../email}}
+            <td>
+              {{#equal ../../email email}}
+                {{#unless queued}}
+                  <a href="/queue/{{id}}" class="btn btn-xs btn-info" >Edit</a>
+                {{/unless}}
+              {{/equal }}
+            </td>
             <td>
               {{#equal ../../email email}}
                 {{#unless queued}}
