@@ -1,7 +1,7 @@
 require('./common/livestamp.min');
-var $ = require('jquery');
 var ko = require('knockout');
 
+var model = new AppViewModel();
 
 function AppViewModel() {
   var self = this;
@@ -16,13 +16,14 @@ function AppViewModel() {
     // push the job to the queue observable list
     observableList.push(jobData[i]);
   }
+
   self.email = email;
   self.jobs = ko.observableArray(observableList);
 }
 
-var model = new AppViewModel();
+// bind everything
 ko.applyBindings(model);
 
 // set up socket subs
-var opts = { updateStatus: true, jobNotify: false, jobnew: false };
+var opts = { updateStatus: true, jobNotify: false, jobNew: false };
 require('./common/socket.io.subs')(opts, model);

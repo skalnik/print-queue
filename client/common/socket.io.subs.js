@@ -6,9 +6,6 @@ module.exports = function(opts, model) {
   var listen = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
   var socket = io.connect(listen);
 
-  // for debugging
-  // console.log(jobData);
-
   // when the server emits that the job status update happened
   // data = {id: id, status: status}
   socket.on('job:update:done', function(data) {

@@ -2,8 +2,11 @@ require('./common/livestamp.min');
 var jQuery = require('jquery');
 var ko = require('knockout');
 require('./common/knockout.bindings.orderable');
+require('./common/knockout.bindings.tooltip');
 
 var $ = jQuery; 
+
+var model = new AppViewModel();
 
 function AppViewModel() {
   var self = this;
@@ -21,37 +24,16 @@ function AppViewModel() {
       
   self.jobs = ko.observableArray(observableList);
 
-  // filter for future
-  self.toggle = function(status) {
-    $('.'+status).toggle();
-  }
-
-  // this is for future thingiverse thumbnail tooltip
-  ko.bindingHandlers.tooltip = {
-    init: function(element, valueAccessor) {
-      var local = ko.utils.unwrapObservable(valueAccessor()),
-          options = {};
-
-      ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
-      ko.utils.extend(options, local);
-
-      $(element).tooltip(options);
-
-      ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-          $(element).tooltip("destroy");
-      });
-    },
-    options: {
-        placement: "right",
-        trigger: "click"
-    }
-  };
-
 }
 
-var model = new AppViewModel();
+// filter table rows
+model.toggle = function(status) {
+  $('.'+status).toggle();
+}
+
+// bind everything
 ko.applyBindings(model);
 
 // set up socket subs
-var opts = { updateStatus: true, jobNotify: true, jobnew: true };
+var opts = { updateStatus: true, jobNotify: true, jobNew: true };
 require('./common/socket.io.subs')(opts, model);
