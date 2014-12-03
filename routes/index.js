@@ -34,6 +34,10 @@ router.post('/', function (req, res) {
   }
 });
 
+router.get('/login', function(req, res) {
+  res.render('login', {});
+})
+
 router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
   QueueItem.find(req.param('itemId'), function (err, queueItem) {
     if (err) {
