@@ -8,7 +8,8 @@ router.get('/', function (req, res) {
     queue: [],
     errors: req.flash('errors'),
     message: req.flash('message')[0],
-    email: req.user
+    queueItem: req.flash('queueItem')[0],
+    email: req.user,
   };
 
   QueueItem.all(function (err, queue) {
@@ -50,7 +51,8 @@ router.get('/queue/:itemId', passwordless.restricted(), function (req, res) {
         req.flash('errors', ['Not authorized to do that!']);
         res.redirect('/login');
       } else {
-        res.render('edit', { queueItem: queueItem });
+        req.flash('queueItem', queueItem);
+        res.redirect('/');
       }
     }
   })

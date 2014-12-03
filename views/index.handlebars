@@ -6,7 +6,12 @@
   {{/if}}
 </div>
 
-{{> queueItem }}
+{{#queueItem}}
+  {{> queueItem}}
+{{else}}
+  {{> queueItem}}
+{{/queueItem}}
+
 
 <h2>Current Queue</h2>
 {{#if queue}}
