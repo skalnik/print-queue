@@ -52,7 +52,7 @@ router.get('/logout', passwordless.logout(), function (req, res) {
 router.post('/requestToken', passwordless.requestToken(function (email, delivery, callback, req) {
     callback(null, email);
   }), function (req, res) {
-  req.flash('message', 'Check your email for deletion instructions');
+  req.flash('message', 'Check your email for sign in instructions');
   res.redirect('/');
 });
 
