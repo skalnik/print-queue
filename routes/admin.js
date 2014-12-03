@@ -40,7 +40,7 @@ router.post('/notify/:id', function (req, res) {
       req.flash('errors', [err.message]);
       res.redirect('/admin');
     } else {
-      if(queueItem.notified) {
+      if (queueItem.notified) {
         req.flash('errors', ['User already notified']);
         res.redirect('/admin');
       } else {
@@ -49,9 +49,9 @@ router.post('/notify/:id', function (req, res) {
           "To": queueItem.email,
           "Subject": "Your 3d printed things are ready!",
           "TextBody": "Hello,\n\nThe 3d printed items you have requested have been printed!" +
-          "\nPlease come pick them up :)"
+            "\nPlease come pick them up :)"
         };
-        email.send(msg, function(err) {
+        email.send(msg, function (err) {
           if (err) {
             req.flash('errors', ['Could not sent message!']);
             console.log("Failed to send message: ", msg);
