@@ -11,7 +11,8 @@ console.log(jobData);
 
 // when the server emits that the job status update happened
 // data = {id: id, status: status}
-socket.on('job:change:status:done', function(data) {
+socket.on('job:update:done', function(data) {
+  console.log('confirmation of job update', data);
   this.currentJob = ko.computed(function() {
     return ko.utils.arrayFilter(model.jobs(), function(Job) {
       return Job.id === data.id;
@@ -22,11 +23,11 @@ socket.on('job:change:status:done', function(data) {
 });
 
 // when the server emits that the notification of a user happened
-socket.on('job:notify:done', function(data) {
-  console.log('got confirmation of notify change and email sent');
+socket.on('job:notify:done', function(id) {
+  console.log('got confirmation of notify change and email sent', id);
   this.currentJob = ko.computed(function() {
     return ko.utils.arrayFilter(model.jobs(), function(Job) {
-      return Job.id === data.index;
+      return Job.id === id;
     });
   });
 
