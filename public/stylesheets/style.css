@@ -9,9 +9,7 @@ table.admin tbody td {
   vertical-align: middle;
 }
 
-table select {
-  width: 95px;
-}
+
 
 table form .btn-danger {
   color: #fff;
@@ -25,7 +23,21 @@ table form .updatebtn {
   padding-left: 5px;
 }
 
-table select.printed {
+table form select {
+  width: 95px;
+}
+
+/* fixing weird bug, not sure selects work well with bootstrap styles */
+table form select {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+
+table select.printing {
   background-color: #dff0d8;
 }
 
@@ -33,7 +45,7 @@ table select.queued {
   background-color: #d9edf7;
 }
 
-table select.submitted {
+table select.pending {
   background-color: #fffffe;
 }
 

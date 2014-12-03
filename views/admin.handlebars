@@ -1,4 +1,3 @@
-{{#if queue}}
   <table class="table table-hover admin">
     <thead>
       <tr>
@@ -9,44 +8,34 @@
         <th>Notified?</th>
       </tr>
     </thead>
-    <tbody>
-      {{#each queue}}
-        <tr>
-          <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
-          <td>{{email}}</td>
-          <td>{{url}}</td>
+    <tbody data-bind="foreach: jobs">
+        <tr data-bind="attr: { 'class': status }">
+          <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
+          <td data-bind="text: email"></td>
+          <td data-bind="text: url"></td>
           <td class="update">
             <form class="form-inline"
                   role="form"
-                  action="/admin/queue/{{id}}/?_method=PATCH"
-                  method="post">
-              <select class="form-control input-sm {{status}}" name="status">
-                {{#each ../possibleStatuses}}
-                  {{#equal ../status this}}
-                    <option value="{{this}}" selected >{{this}}</option>
-                  {{else}}
-                    <option value="{{this}}">{{this}}</option>
-                  {{/equal}}
-                {{/each}}
+                  method="post"
+                  data-bind="attr: { 'action': '/admin/queue/' + id + '/?_method=PATCH', }">
+              <select data-bind="value: status, attr: { 'class': status }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
+                    <!-- need to figure out how to get this list pulling from a dynamic list again -->
+                    <option value="pending">pending</option>
+                    <option value="printing">printing</option>
+                    <option value="queued">queued</option>
+                    <option value="rejected">rejected</option>
               </select>
               <button type="submit" class="btn btn-default btn-xs">Update</button>
             </form>
           </td>
           <td>
-            {{#if notified}}
-              Yes
-            {{else}}
-              <form class="form-inline" role="form" action="/admin/notify/{{id}}" method="post">
+              <span data-bind="visible: notified">Yes</span>
+              <form class="form-inline" role="form" data-bind="visible: (notified() == false), attr: { 'action': '/admin/notify/' + id }" method="post">
                 <button type="submit" class="btn btn-default btn-xs">Notify</button>
               </form>
-            {{/if}}
         </tr>
-      {{/each}}
     </tbody>
   </table>
-{{else}}
-  Queue empty!
-{{/if}}
 
 <script>
   var jobData = {};

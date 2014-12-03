@@ -20,16 +20,13 @@ router.post('/', function (req, res) {
     queueItem = new QueueItem(req.body.queue),
     errMsgs = queueItem.errors,
     i;
+
   if (queueItem && queueItem.valid) {
-    queueItem.save(function (err, id) {
+    queueItem.save(function (err, data) {
       if (err) { req.flash('errors', [err.message]); }
-      
-      var data = req.body.queue;
-      // I need the id for binding
-      data.id = id;
       // emit!!
       global.socket.emit('job:new', data);
-      
+
       res.redirect('/');
     });
   } else {
