@@ -17,5 +17,4 @@ router.post('/requestToken', passwordless.requestToken(function (email, delivery
   res.redirect('/');
 });
 
-
 module.exports = router;
