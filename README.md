@@ -11,7 +11,7 @@ Then:
 ```
 $ git clone https://github.com/skalnik/print-queue.git
 $ cd print-queue
-$ REDIS_URL=redis://127.0.0.1:16379 npm start
+$ REDIS_URL=redis://127.0.0.1:6379 npm start
 ```
 
 Then go to [localhost:3000](http://localhost:3000) :eyes:
