@@ -27,9 +27,13 @@ router.post('/', function (req, res) {
     queueItem = new QueueItem(req.body.queue),
     errMsgs = queueItem.errors,
     i;
+
   if (queueItem && queueItem.valid) {
-    queueItem.save(function (err) {
+    queueItem.save(function (err, data) {
       if (err) { req.flash('errors', [err.message]); }
+      // emit!!
+      global.socket.emit('job:new', data);
+
       res.redirect('/');
     });
   } else {
