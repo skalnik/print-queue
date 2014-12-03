@@ -8,7 +8,7 @@ router.all('*', function (req, res, next) {
   var user = auth(req);
   if (user === undefined || user.pass !== req.password) {
     res.statusCode = 401;
-    res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Print Queue"');
     res.end('Unauthorized');
   } else {
     next();
