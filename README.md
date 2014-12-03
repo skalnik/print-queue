@@ -1,9 +1,8 @@
 # Print Queue
 
-A simple queueing system for the 3D Printers at RobotsConf written with Node &
-Redis. Giggle at my terrible code.
+A simple system for users ask for things to be 3D Printer at RobotsConf.
 
-## How the fuck does this work?
+## Set up
 
 First ensure you have redis & node installed.
 
