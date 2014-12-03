@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var auth = require('basic-auth');
-var QueueItem = require('../lib/queueItem.js');
+var express = require('express'),
+  email = require('postmark')(process.env.POSTMARK_API_KEY),
+  auth = require('basic-auth'),
+  router = express.Router(),
+  QueueItem = require('../lib/queueItem.js');
 
 router.all('*', function (req, res, next) {
   var user = auth(req);
@@ -29,6 +30,43 @@ router.get('/', function (req, res) {
       locals.queue = queue;
     }
     res.render('admin', locals);
+  });
+});
+
+router.post('/notify/:id', function (req, res) {
+  var itemId = req.params.id;
+  QueueItem.find(itemId, function (err, queueItem) {
+    if (err) {
+      req.flash('errors', [err.message]);
+      res.redirect('/admin');
+    } else {
+      if(queueItem.notified) {
+        req.flash('errors', ['User already notified']);
+        res.redirect('/admin');
+      } else {
+        var msg = {
+          "From": "print.queue@mikeskalnik.com",
+          "To": queueItem.email,
+          "Subject": "Your 3d printed things are ready!",
+          "TextBody": "Hello,\n\nThe 3d printed items you have requested have been printed!" +
+          "\nPlease come pick them up :)"
+        };
+        email.send(msg, function(err) {
+          if (err) {
+            req.flash('errors', ['Could not sent message!']);
+            console.log("Failed to send message: ", msg);
+            console.log(err);
+          } else {
+            req.flash('message', 'Email sent');
+            console.log("Successfully sent message: ", msg);
+          }
+          QueueItem.update(itemId, { notified: true }, function (err) {
+            if (err) { req.flash('errors', ['Could not update item: ' + err.message]); }
+            res.redirect('/admin');
+          });
+        });
+      }
+    }
   });
 });
 
