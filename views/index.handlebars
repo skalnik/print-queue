@@ -1,9 +1,6 @@
 <div class="user-well">
-  {{#if email}}
-    <a href="/logout" alt="Sign out">Sign out</a>
-  {{ else }}
-    <a href="/login" alt="Sign In">Sign In</a>
-  {{/if}}
+    <a href="/logout" alt="Sign out" data-bind="if: email.length">Sign out</a>
+    <a href="/login" alt="Sign In" data-bind="ifnot: email.length">Sign In</a>
 </div>
 
 {{#queueItem}}
@@ -14,51 +11,47 @@
 
 
 <h2>Current Queue</h2>
-{{#if queue}}
-  <table class="table table-hover">
+  <table class="table table-hover" data-bind="if: (jobs().length)">
     <thead>
       <tr>
         <th>When</th>
         <th>URL</th>
         <th>Status</th>
-        {{#if ../email}}
-          <th></th>
-          <th></th>
-        {{/if}}
+          <th data-bind="if: email.length"></th>
+          <th data-bind="if: email.length"></th>
       </tr>
     </thead>
-    <tbody>
-      {{#each queue}}
+    <tbody data-bind="foreach: jobs">
         <tr>
-          <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
-          <td>{{url}}</td>
-          <td>{{status}} </td>
-          {{#if ../../email}}
-            <td>
-              {{#equal ../../email email}}
-                {{#unless queued}}
-                  <a href="/queue/{{id}}" class="btn btn-xs btn-info" >Edit</a>
-                {{/unless}}
-              {{/equal }}
+          <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
+          <td><a data-bind="text: url, attr: { 'href': url }"></a></td>
+          <td data-bind="text: status"></td>
+            <td data-bind="if: ($parent.email.length)">
+            <!-- ko if: ($parent.email == email && status != 'queued') -->
+              <a href="/queue/{{id}}" class="btn btn-xs btn-info" data-bind="text: 'Edit'"></a>
+            <!-- /ko -->
             </td>
             <td>
-              {{#equal ../../email email}}
-                {{#unless queued}}
                   <form class="form-inline"
                         role="form"
                         action="/queue/{{id}}?_method=DELETE"
                         method="post">
-                    <button type="submit" class="btn btn-danger btn-xs">&times;</button>
+                    <!-- ko if: ($parent.email == email && status != 'queued') -->
+                      <button type="submit" class="btn btn-danger btn-xs" data-bind="text: '&times;'"></button>
+                    <!-- /ko -->
                   </form>
-                {{/unless}}
-              {{/equal }}
             </td>
-          {{/if}}
         </tr>
-      {{/each}}
     </tbody>
   </table>
-{{else}}
-  Queue empty!
-{{/if}}
+
+  <p data-bind="ifnot: (jobs().length)">Queue empty!</p>
+
+<script>
+  var jobData = {};
+  var email = '';
+  {{#if queue}} jobData = {{{json queue}}}; {{/if}}
+  {{#if email}} email = "{{email}}"; {{/if}}
+</script>
+
 <script type="text/javascript" src="/javascripts/index.js"></script>
