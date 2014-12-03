@@ -62,6 +62,8 @@ router.post('/notify/:id', function (req, res) {
           }
           QueueItem.update(itemId, { notified: true }, function (err) {
             if (err) { req.flash('errors', ['Could not update item: ' + err.message]); }
+            // emit!!
+            global.socket.emit('job:notify:done', itemId);
             res.redirect('/admin');
           });
         });
@@ -88,6 +90,11 @@ router.patch('/queue/:id', function (req, res) {
     } else {
       req.flash('message', 'Item updated!');
     }
+    var data = newAttrs;
+    // I need the id for binding
+    data.id = itemId;
+    // emit!!
+    global.socket.emit('job:update:done', data);
     res.redirect('/admin');
   });
 });
