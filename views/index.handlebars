@@ -40,7 +40,9 @@
         <th>When</th>
         <th>URL</th>
         <th>Status</th>
-        <th></th>
+        {{#if ../email}}
+          <th></th>
+        {{/if}}
       </tr>
     </thead>
     <tbody>
@@ -49,19 +51,23 @@
           <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
           <td>{{url}}</td>
           <td>{{status}} </td>
-          <td>
-            {{#unless queued}}
-              <form class="form-inline" role="form" action="/requestToken" method="post">
-                <input type="hidden" name="itemId" value="{{id}}" />
-                <input type="hidden" name="user" value="{{email}}" />
-                <button type="submit"
-                       class="btn btn-danger btn-xs tipsy-me"
-                       title="This requires access to the email this was queued with">
-                  &times;
-                </button>
-              </form>
-            {{/unless}}
-          </td>
+          {{#if ../../email}}
+            <td>
+              {{#equal ../../email email}}
+                {{#unless queued}}
+                  <form class="form-inline" role="form" action="/requestToken" method="post">
+                    <input type="hidden" name="itemId" value="{{id}}" />
+                    <input type="hidden" name="user" value="{{email}}" />
+                    <button type="submit"
+                           class="btn btn-danger btn-xs"
+                           title="This requires access to the email this was queued with">
+                      &times;
+                    </button>
+                  </form>
+                {{/unless}}
+              {{/equal }}
+            </td>
+          {{/if}}
         </tr>
       {{/each}}
     </tbody>
