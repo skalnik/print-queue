@@ -1,10 +1,9 @@
 require('./common/livestamp.min');
-var jQuery = require('jquery');
+var $ = require('jquery');
 var ko = require('knockout');
 require('./common/knockout.bindings.orderable');
 require('./common/knockout.bindings.tooltip');
-
-var $ = jQuery; 
+var io = require('./common/socket.io-1.2.1');
 
 var model = new AppViewModel();
 
