@@ -11,7 +11,7 @@
     <tbody>
       {{#each queue}}
         <tr>
-          <td>{{timestamp}}</td>
+          <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
           <td>{{email}}</td>
           <td>{{url}}</td>
           <td class="update">

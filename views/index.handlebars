@@ -30,7 +30,7 @@
     <tbody>
       {{#each queue}}
         <tr>
-          <td>{{timestamp}}</td>
+          <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
           <td>{{url}}</td>
           <td>{{status}} </td>
           <td>
