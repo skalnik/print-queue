@@ -30,7 +30,6 @@
     "passwordless-redisstore": "0.0.1",
     "postmark": "~0.2.6",
     "redis": "~0.12.1",
-    "tipsy-browserify": "~1.0.0",
     "validator": "~3.19.1"
   },
   "devDependencies": {
