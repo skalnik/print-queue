@@ -47,3 +47,12 @@
 {{else}}
   Queue empty!
 {{/if}}
+
+<script>
+  {{#if queue}}
+    var jobData = {{{queue}}};
+  {{else}}
+    var jobData = {};
+  {{/if}}
+</script>
+<script type="text/javascript" src="/javascripts/admin.js"></script>
