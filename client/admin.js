@@ -2,6 +2,7 @@ require('./common/livestamp.min');
 var jQuery = require('jquery');
 var io = require('./common/socket.io-1.2.1');
 var ko = require('knockout');
+require('./common/knockout.bindings.orderable');
 
 // set up socket.io
 var listen = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
