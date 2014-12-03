@@ -4,7 +4,7 @@ var express = require('express'),
   router = express.Router(),
   QueueItem = require('../lib/queueItem.js');
 
-var ADMINS = ['mike.skalnik@gmail.com']
+var ADMINS = ['mike.skalnik@gmail.com', 'suz.hinton@gmail.com'];
 
 router.all('*', passwordless.restricted(), function (req, res, next) {
   if (ADMINS.indexOf(req.user) === -1) {
