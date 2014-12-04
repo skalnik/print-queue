@@ -2,3 +2,4 @@ node_modules/*
 tmp/*
 public/javascripts/*
 .DS_Store
+dump.rdb

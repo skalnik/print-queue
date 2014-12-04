@@ -23,12 +23,8 @@
                   role="form"
                   method="post"
                   data-bind="attr: { 'action': '/admin/queue/' + id + '/?_method=PATCH', }">
-              <select data-bind="value: status, attr: { 'class': status }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
-                    <!-- need to figure out how to get this list pulling from a dynamic list again -->
-                    <option value="submitted">submitted</option>
-                    <option value="rejected">rejected</option>
-                    <option value="queued">queued</option>
-                    <option value="printed">printed</option>
+              <select data-bind="foreach: possibleStatuses, value: status, attr: { 'class': status }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
+                    <option data-bind="value: $data, text: $data"></option>
               </select>
               <button type="submit" class="btn btn-default btn-xs">Update</button>
             </form>
@@ -44,7 +40,9 @@
 
 <script>
   var jobData = {};
+  var possibleStatuses = [];
   {{#if queue}} jobData = {{{json queue}}}; {{/if}}
+  {{#if possibleStatuses}} possibleStatuses = {{{json possibleStatuses}}}; {{/if}}
 </script>
 
 <script type="text/javascript" src="/javascripts/admin.js"></script>

@@ -47,7 +47,7 @@ table form select {
   font-size: 12px;
 }
 
-table select.printing {
+table select.printed {
   background-color: #dff0d8;
 }
 
@@ -55,12 +55,29 @@ table select.queued {
   background-color: #d9edf7;
 }
 
-table select.pending {
+table select.submitted {
   background-color: #fffffe;
 }
 
 table select.rejected {
   background-color: #f2dede;
+}
+
+
+#user-queue td.printed {
+  color: #5cb85c;
+}
+
+#user-queue td.queued {
+  color: #337ab7;
+}
+
+#user-queue td.submitted {
+  color: #000;
+}
+
+#user-queue td.rejected {
+  color: #d9534f;
 }
 
 .toggles {
