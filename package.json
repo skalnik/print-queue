@@ -34,6 +34,7 @@
     "socket.io": "^1.2.1",
     "tipsy-browserify": "~1.0.0",
     "validator": "~3.19.1",
+    "watchjs": "0.0.0",
     "request": "~2.49.0"
   },
   "devDependencies": {
