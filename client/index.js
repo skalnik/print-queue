@@ -25,5 +25,5 @@ function AppViewModel() {
 ko.applyBindings(model);
 
 // set up socket subs
-var opts = { updateStatus: true, jobNotify: false, jobNew: false };
+var opts = { updateStatus: true, jobNotify: false, jobNew: false, jobDelete: false };
 require('./common/socket.io.subs')(opts, model);
