@@ -1,5 +1,5 @@
 require('./common/livestamp.min');
-var jQuery = require('jquery');
+var $ = require('jquery');
 var io = require('./common/socket.io-1.2.1');
 var ko = require('knockout');
 require('./common/knockout.bindings.orderable');
