@@ -36,6 +36,35 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="queue[amount]" class="col-sm-3 control-label">How many?</label>
+    <div class="col-sm-8">
+      <input  type="number"
+              name="queue[amount]"
+              class="form-control"
+              min="1"
+              max="5"
+              {{#if amount}}
+                value="{{amount}}"
+              {{else}}
+                value="1"
+              {{/if}}
+              />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="queue[notes]" class="col-sm-3 control-label">Notes</label>
+    <div class="col-sm-8">
+      <textarea class="form-control"
+              name="queue[notes]"
+              rows="3"
+              {{#if notes}}
+                >{{notes}}</textarea>
+              {{else}}
+                placeholder="Anything you'd like us to know"></textarea>
+            {{/if}}
+    </div>
+  </div>
+  <div class="form-group">
     <div class="col-sm-offset-3 col-sm-2">
       <input  class="btn btn-primary"
               type="submit"
