@@ -22,6 +22,7 @@ function AppViewModel() {
   }
       
   self.jobs = ko.observableArray(observableList);
+  self.possibleStatuses = possibleStatuses;
 
 }
 
