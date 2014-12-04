@@ -18,7 +18,6 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Preview</th>
         <th>When</th>
         <th>URL</th>
         <th>Status</th>
@@ -31,11 +30,6 @@
     <tbody>
       {{#each queue}}
         <tr>
-          {{#if thumbnail}}
-            <td><img src="{{thumbnail}}" /></td>
-          {{else}}
-            <td></td>
-          {{/if}}
           <td data-livestamp="{{math timestamp '/' '1000'}}"></td>
           <td>{{url}}</td>
           <td>{{status}} </td>
