@@ -43,5 +43,5 @@ model.toggle = function(status) {
 ko.applyBindings(model);
 
 // set up socket subs
-var opts = { jobChange: true, jobNew: true };
+var opts = { jobChange: true, jobNew: true, jobDelete: true };
 require('./common/socket.io.subs')(opts, model);

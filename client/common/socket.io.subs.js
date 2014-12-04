@@ -6,6 +6,16 @@ module.exports = function(opts, model) {
   var listen = window.location.origin || (window.location.protocol + '//' + window.location.hostname + ':' + window.location.port);
   var socket = io.connect(listen);
 
+  // when the server emits that the deletion of a queue item happened
+  // id = just the id of the db entry/job
+  socket.on('job:delete', function(id) {
+    if (opts.jobDelete === false) return;
+
+    // remove the job from the array
+    model.jobs.remove(function(item) { return parseInt(item.id) === parseInt(id) })
+
+  });
+
   // when server emits a new job happened
   socket.on('job:new', function(data) {
     if (opts.jobNew === false) return;

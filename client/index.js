@@ -33,5 +33,5 @@ function AppViewModel() {
 ko.applyBindings(model);
 
 // set up socket subs
-var opts = { jobChange: true, jobNew: false };
+var opts = { jobChange: true, jobNew: false, jobDelete: false };
 require('./common/socket.io.subs')(opts, model);
