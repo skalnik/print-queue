@@ -35,7 +35,20 @@ module.exports = function(opts, model) {
         });
       });
 
-     currentJob()[0].notified(true);
+    if (Object.keys(currentJob()).length) {
+      currentJob()[0].notified(true);
+    }
+
+  });
+
+  // when the server emits that the deletion of a queue item happened
+  // id = just the id of the db entry/job
+  socket.on('job:delete:done', function(id) {
+    if (opts.jobDelete === false) return;
+
+    // remove the job from the array
+    model.jobs.remove(function(item) { return parseInt(item.id) === parseInt(id) })
+
   });
 
   // when server emits a new job happened

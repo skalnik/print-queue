@@ -103,6 +103,7 @@ router.delete('/queue/:itemId', passwordless.restricted(), function (req, res) {
         if (err) {
           req.flash('errors', [err.message]);
         } else {
+          global.socket.emit('job:delete:done', req.params.itemId);
           req.flash('message', 'Item deleted!');
         }
         res.redirect('/');
