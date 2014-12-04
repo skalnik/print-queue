@@ -34,11 +34,8 @@
     "socket.io": "^1.2.1",
     "tipsy-browserify": "~1.0.0",
     "validator": "~3.19.1",
-<<<<<<< HEAD
-    "watchjs": "0.0.0"
-=======
+    "watchjs": "0.0.0",
     "request": "~2.49.0"
->>>>>>> origin/master
   },
   "devDependencies": {
     "jslint": "~0.6.6",
