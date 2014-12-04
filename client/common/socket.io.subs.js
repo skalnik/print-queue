@@ -39,13 +39,14 @@ module.exports = function(opts, model) {
 
     // check for empty result
     if (Object.keys(currentJob()).length) {
+      var cJob = currentJob()[0];
       // these need to be updated manually because they're observables and you can't overwrite them with native values
       // or they won't be observable anymore
       // a for loop after a comparison of each would work too
-      currentJob()[0].notified(data.notified);
-      currentJob()[0].status(data.status);
-      currentJob()[0].url(data.url);
-      currentJob()[0].thumbnail(data.thumbnail);
+      cJob.notified(data.notified);
+      cJob.status(data.status);
+      cJob.url(data.url);
+      cJob.thumbnail(data.thumbnail);
     }
   });
 
