@@ -4,6 +4,7 @@
   <table class="table table-hover admin">
     <thead>
       <tr>
+        <th>Preview</th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'timestamp'}">When</a></th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'email'}">Email</a></th>
         <th>URL</th>
@@ -13,6 +14,7 @@
     </thead>
     <tbody data-bind="foreach: jobs">
         <tr data-bind="attr: { 'class': status }">
+          <td><img src='#' data-bind="attr: {'src': thumbnail }" /></td>
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td data-bind="text: email"></td>
           <td><a href="#" data-bind="text: url, attr: { 'href': url }"></a></td>
@@ -24,9 +26,9 @@
               <select data-bind="value: status, attr: { 'class': status }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
                     <!-- need to figure out how to get this list pulling from a dynamic list again -->
                     <option value="submitted">submitted</option>
-                    <option value="printing">printing</option>
-                    <option value="queued">queued</option>
                     <option value="rejected">rejected</option>
+                    <option value="queued">queued</option>
+                    <option value="printed">printed</option>
               </select>
               <button type="submit" class="btn btn-default btn-xs">Update</button>
             </form>
