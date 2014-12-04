@@ -26,21 +26,24 @@
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td><a data-bind="text: url, attr: { 'href': url }"></a></td>
           <td data-bind="text: status"></td>
-            <td data-bind="if: ($parent.email.length)">
+          <td data-bind="if: ($parent.email.length)">
             <!-- ko if: ($parent.email == email && status != 'queued') -->
-              <a href="/queue/{{id}}" class="btn btn-xs btn-info" data-bind="text: 'Edit'"></a>
+              <a href="#"
+                 class="btn btn-xs btn-info"
+                 data-bind="text: 'Edit', attr: { 'href': 'queue/' + id }"></a>
             <!-- /ko -->
-            </td>
-            <td>
-                  <form class="form-inline"
-                        role="form"
-                        action="/queue/{{id}}?_method=DELETE"
-                        method="post">
-                    <!-- ko if: ($parent.email == email && status != 'queued') -->
-                      <button type="submit" class="btn btn-danger btn-xs" data-bind="text: '&times;'"></button>
-                    <!-- /ko -->
-                  </form>
-            </td>
+          </td>
+          <td>
+            <!-- ko if: ($parent.email == email && status != 'queued') -->
+              <form class="form-inline"
+                    role="form"
+                    action="#"
+                    method="post"
+                    data-bind="attr: { action: '/queue/' + id + '?_method=DELETE' }">
+                  <button type="submit" class="btn btn-danger btn-xs" data-bind="text: '&times;'"></button>
+              </form>
+            <!-- /ko -->
+          </td>
         </tr>
     </tbody>
   </table>
