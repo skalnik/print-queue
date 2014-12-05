@@ -16,15 +16,17 @@
       <tr>
         <th>When</th>
         <th>URL</th>
+        <th>Amount</th>
         <th>Status</th>
-          <th data-bind="if: email.length"></th>
-          <th data-bind="if: email.length"></th>
+        <th data-bind="if: email.length"></th>
+        <th data-bind="if: email.length"></th>
       </tr>
     </thead>
     <tbody data-bind="foreach: jobs">
         <tr>
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td><a data-bind="text: url, attr: { 'href': url }"></a></td>
+          <td data-bind="text: amount"></td>
           <td data-bind="text: status, attr: { 'class': status }"></td>
           <td data-bind="if: ($parent.email.length)">
             <!-- ko if: ($parent.email == email && status != 'queued') -->
