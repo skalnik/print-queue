@@ -14,27 +14,27 @@
         <th>Notified?</th>
       </tr>
     </thead>
-    <tbody data-bind="foreach: jobs">
-        <tr data-bind="attr: { 'class': status }">
-          <td><img src='#' data-bind="attr: {'src': thumbnail }" /></td>
+    <tbody data-bind="foreach: jobs()">
+        <tr data-bind="attr: { 'class': status() }">
+          <td><img src='#' data-bind="attr: {'src': thumbnail() }" /></td>
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td data-bind="text: email"></td>
-          <td><a href="#" data-bind="text: url, attr: { 'href': url }"></a></td>
-          <td data-bind="text: amount"></td>
-          <td data-bind="text: notes"></td>
+          <td><a href="#" data-bind="text: url(), attr: { 'href': url() }"></a></td>
+          <td data-bind="text: amount()"></td>
+          <td data-bind="text: notes()"></td>
           <td class="update">
             <form class="form-inline"
                   role="form"
                   method="post"
                   data-bind="attr: { 'action': '/admin/queue/' + id + '/?_method=PATCH', }">
-              <select data-bind="foreach: possibleStatuses, value: status, attr: { 'class': status }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
+              <select data-bind="foreach: possibleStatuses, value: status(), attr: { 'class': status() }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
                     <option data-bind="value: $data, text: $data"></option>
               </select>
               <button type="submit" class="btn btn-default btn-xs">Update</button>
             </form>
           </td>
           <td>
-              <span data-bind="visible: notified">Yes</span>
+              <span data-bind="visible: notified()">Yes</span>
               <form class="form-inline" role="form" data-bind="visible: (notified() == false), attr: { 'action': '/admin/notify/' + id }" method="post">
                 <button type="submit" class="btn btn-default btn-xs">Notify</button>
               </form>
