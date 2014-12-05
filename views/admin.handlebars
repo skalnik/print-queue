@@ -8,6 +8,8 @@
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'timestamp'}">When</a></th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'email'}">Email</a></th>
         <th>URL</th>
+        <th>Amount</th>
+        <th>Notes</th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'status'}">Status</a></th>
         <th>Notified?</th>
       </tr>
@@ -18,6 +20,8 @@
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td data-bind="text: email"></td>
           <td><a href="#" data-bind="text: url, attr: { 'href': url }"></a></td>
+          <td data-bind="text: amount"></td>
+          <td data-bind="text: notes"></td>
           <td class="update">
             <form class="form-inline"
                   role="form"
