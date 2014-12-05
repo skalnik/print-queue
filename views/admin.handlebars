@@ -4,6 +4,7 @@
   <table class="table table-hover admin">
     <thead>
       <tr>
+        <th>ID</th>
         <th>Preview</th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'timestamp'}">When</a></th>
         <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'email'}">Email</a></th>
@@ -16,6 +17,7 @@
     </thead>
     <tbody data-bind="foreach: jobs()">
         <tr data-bind="attr: { 'class': status() }">
+          <td data-bind="text: id"></td>
           <td><img src='#' data-bind="attr: {'src': thumbnail() }" /></td>
           <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
           <td data-bind="text: email"></td>
