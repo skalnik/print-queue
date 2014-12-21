@@ -1,54 +1,59 @@
-  <p class="toggles">
-    <a href="#" class="btn btn-default btn-xs" data-bind="click: toggle('rejected')">Toggle rejected</a> 
-  </p>
-  <table class="table table-hover admin">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Preview</th>
-        <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'timestamp'}">When</a></th>
-        <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'email'}">Email</a></th>
-        <th>URL</th>
-        <th>Amount</th>
-        <th>Notes</th>
-        <th><a href="#" data-bind="orderable: {collection: 'jobs', field: 'status'}">Status</a></th>
-        <th>Notified?</th>
-      </tr>
-    </thead>
-    <tbody data-bind="foreach: jobs()">
-        <tr data-bind="attr: { 'class': status() }">
-          <td data-bind="text: id"></td>
-          <td><img src='#' data-bind="attr: {'src': thumbnail() }" /></td>
-          <td data-bind="attr: { 'data-livestamp': timestamp / 1000 }"></td>
-          <td data-bind="text: email"></td>
-          <td><a href="#" data-bind="text: url(), attr: { 'href': url() }"></a></td>
-          <td data-bind="text: amount()"></td>
-          <td data-bind="text: notes()"></td>
-          <td class="update">
-            <form class="form-inline"
-                  role="form"
-                  method="post"
-                  data-bind="attr: { 'action': '/admin/queue/' + id + '/?_method=PATCH', }">
-              <select data-bind="foreach: possibleStatuses, value: status(), attr: { 'class': status() }, css: { 'form-control': true, 'input-sm': true, status: true }" name="status">
-                    <option data-bind="value: $data, text: $data"></option>
-              </select>
-              <button type="submit" class="btn btn-default btn-xs">Update</button>
+<table class="table table-hover admin">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Preview</th>
+      <th>When</th>
+      <th>Email</th>
+      <th>URL</th>
+      <th>Amount</th>
+      <th>Notes</th>
+      <th>Status</th>
+      <th>Notified?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each queue}}
+      <tr class="{{status}}">
+        <td>{{id}}</td>
+        <td><img src="{{thumbnail}}" /></td>
+        <td data-livestamp="{{prepareTime timestamp}}"></td>
+        <td>{{email}}</td>
+        <td><a href="{{url}}">{{url}}</a></td>
+        <td>{{amount}}</td>
+        <td>{{notes}}</td>
+        <td>
+          <form
+            role="form"
+            class="form-inline"
+            method="post"
+            action="/admin/queue/{{id}}/?_method=PATCH">
+            <select name="status" class="{{status}}">
+              {{#each possibleStatuses}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+            <button type="submit" class="btn btn-default btn-xs">Update</button>
+          </form>
+        </td>
+        <td>
+          {{#if notified}}
+            Yes
+          {{else}}
+            <form
+              role="form"
+              class="form-inline"
+              method="post"
+              action="/admin/notify/{{id}}">
+              <button type="submit" class="btn btn-default btn-xs">
+                Notify
+              </button>
             </form>
-          </td>
-          <td>
-              <span data-bind="visible: notified()">Yes</span>
-              <form class="form-inline" role="form" data-bind="visible: (notified() == false), attr: { 'action': '/admin/notify/' + id }" method="post">
-                <button type="submit" class="btn btn-default btn-xs">Notify</button>
-              </form>
-        </tr>
-    </tbody>
-  </table>
-
-<script>
-  var jobData = {};
-  var possibleStatuses = [];
-  {{#if queue}} jobData = {{{json queue}}}; {{/if}}
-  {{#if possibleStatuses}} possibleStatuses = {{{json possibleStatuses}}}; {{/if}}
-</script>
+          {{/if}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
 
 <script type="text/javascript" src="/javascripts/admin.js"></script>
